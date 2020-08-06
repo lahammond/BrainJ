@@ -1,0 +1,109 @@
+// Parameter file for B-spline registration of Mouse Brains 3D
+
+(FixedInternalImagePixelType "float")
+(MovingInternalImagePixelType "float")
+
+(UseDirectionCosines "true")
+
+// **************** Main Components **************************
+
+(Registration "MultiResolutionRegistration")
+(Interpolator "BSplineInterpolator")
+(ResampleInterpolator "FinalBSplineInterpolator")
+(Resampler "DefaultResampler")
+
+(FixedImagePyramid "FixedSmoothingImagePyramid")
+(MovingImagePyramid "MovingSmoothingImagePyramid")
+
+(Transform "RecursiveBSplineTransform")
+(Metric "AdvancedMattesMutualInformation")
+
+// ***************** Transformation **************************
+
+//(FinalGridSpacingInPhysicalUnits 16)
+
+(FinalGridSpacingInVoxels 25 25 25)
+
+
+(HowToCombineTransforms "Compose")
+
+// ******************* Similarity measure *********************
+
+
+(NumberOfHistogramBins 32)
+
+(ErodeMask "false")
+
+// ******************** Multiresolution **********************
+
+(NumberOfResolutions 3)
+(FixedLimiteRangeRadio 0.0)
+(MovingLimitRangeRation 0.0)
+(FixedKernalBSplineOrder 3)
+(MovingKernelBSplineOrder 3)
+
+// ******************* Optimizer ****************************
+
+// start at 2000, up to 5000
+(MaximumNumberOfIterations 5000)
+
+
+//(Optimizer "AdaptiveStochasticGradientDescent")
+//(ASGDParameterEstimationMethod "DisplacementDistribution")
+
+
+
+(Optimizer "StandardGradientDescent")
+
+//Optimiser StandardGradientDescent parameters - page 29 manual not required if using AdaptiveStochasticGradientDescent 0.6
+(SP_alpha 0.6)
+
+// SP_A start at 50 used at 100
+(SP_A 100.0)
+
+// SP_a start at 1000
+(SP_a 10000.0)
+
+// **************** Image sampling **********************
+
+// start at 2048, up to 10000
+(NumberOfSpatialSamples 10000)
+
+(NewSamplesEveryIteration "true")
+(CheckNumberOfSamples "true")
+
+//default is 1
+(FixedImageBSplineInterpolationOrder 1)
+
+// if Random just requires Random sampler
+//(ImageSampler "Random")
+
+// if Random Coordinate, requires additional parameters as below
+(ImageSampler "RandomCoordinate")
+(UseRandomSampleRegion "true")
+(SampleRegionSize 50.0 50.0 50.0)
+(MaximumNumberOfSamplingAttempts 10)
+
+//to try and solve error
+//(RequiredRatioOfValidSamples 0.01)
+
+// ************* Interpolation and Resampling ****************
+
+// start at 1, setting to 3 can improve accuracy
+(BSplineInterpolationOrder 3)
+
+(FinalBSplineInterpolationOrder 3)
+
+(DefaultPixelValue 0)
+
+(WriteResultImage "true")
+(WriteResultImageAfterEachResolution "false")
+(WriteTransformParametersEachIteration "false")
+(ShowExactMetricValue "false")
+(WriteDiffusionFiles "true")
+
+// Original:
+(ResultImagePixelType "short")
+(ResultImageFormat "mhd")
+
+

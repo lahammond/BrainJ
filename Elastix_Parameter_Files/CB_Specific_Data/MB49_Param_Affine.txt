@@ -1,0 +1,85 @@
+// Parameter file for affine registration of Mouse Brains 3D
+
+(FixedInternalImagePixelType "float")
+(MovingInternalImagePixelType "float")
+
+(UseDirectionCosines "true")
+
+// **************** Main Components **************************
+
+(Registration "MultiResolutionRegistration")
+(Interpolator "BSplineInterpolator")
+(ResampleInterpolator "FinalBSplineInterpolator")
+(Resampler "DefaultResampler")
+
+(FixedImagePyramid "FixedSmoothingImagePyramid")
+(MovingImagePyramid "MovingSmoothingImagePyramid")
+
+(Optimizer "AdaptiveStochasticGradientDescent")
+(Transform "AffineTransform")
+(Metric "AdvancedMattesMutualInformation")
+
+// ***************** Transformation **************************
+
+(AutomaticScalesEstimation "true")
+
+(AutomaticTransformInitialization "true")
+
+(HowToCombineTransforms "Compose")
+
+// ******************* Similarity measure *********************
+
+(NumberOfHistogramBins 32)
+
+(ErodeMask "false")
+
+// ******************** Multiresolution **********************
+
+(NumberOfResolutions 3)
+
+
+// ******************* Optimizer ****************************
+
+// start at 250
+(MaximumNumberOfIterations 500)
+
+
+// **************** Image sampling **********************
+
+// start at 2048
+(NumberOfSpatialSamples 4000)
+
+(NewSamplesEveryIteration "true")
+(CheckNumberOfSamples "true")
+
+// if Random just requires Random sampler
+//(ImageSampler "Random")
+
+// if Random Coordinate, requires additional parameters as below
+(ImageSampler "RandomCoordinate")
+
+(UseRandomSampleRegion "false")
+(SampleRegionSize 50.0 50.0 50.0)
+(MaximumNumberOfSamplingAttempts 10)
+
+
+// ************* Interpolation and Resampling ****************
+
+//start at 1 but 3 can improve accuracy
+(BSplineInterpolationOrder 3)
+
+(FinalBSplineInterpolationOrder 3)
+
+//default is 1
+(FixedImageBSplineInterpolationOrder 3)
+
+(DefaultPixelValue 0)
+
+//not needed if we are moving to bspline
+(WriteResultImage "true")
+
+(ResultImagePixelType "short")
+(ResultImageFormat "mhd")
+
+
+

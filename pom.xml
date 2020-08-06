@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+		http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.scijava</groupId>
+		<artifactId>pom-scijava</artifactId>
+		<version>17.1.1</version>
+		<relativePath />
+	</parent>
+
+	<groupId>com.zuckerman.cellularimaging</groupId>
+	<version>0.9.95</version>
+
+	<name>BrainJ</name>
+	<url>https://zuckermaninstitute.columbia.edu</url>
+	<inceptionYear>2017</inceptionYear>
+	<organization>
+		<name>Zuckerman Institute</name>
+		<url>https://zuckermaninstitute.columbia.edu</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>Simplified BSD License</name>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<!-- See https:// -->
+		<developer>
+			<id></id>
+			<name>Luke Hammond</name>
+			<url>http://:</url>
+			<roles>
+				<role>founder</role>
+				<role>lead</role>
+				<role>developer</role>
+				<role>debugger</role>
+				<role>reviewer</role>
+				<role>support</role>
+				<role>maintainer</role>
+			</roles>
+		</developer>
+	</developers>
+	<contributors>
+		<contributor>
+			<name>N/A</name>
+		</contributor>
+	</contributors>
+
+	<mailingLists>
+		<mailingList>
+			<name> Forum</name>
+			<archive>http://forum.imagej.net/</archive>
+		</mailingList>
+	</mailingLists>
+
+	<scm>
+		<connection>scm:git:git://github.com/lahammond/BrainJ</connection>
+		<developerConnection>scm:git:git@github.com:putlinkhere</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/lahammond/BrainJ</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/lahammond/BrainJ/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>None</system>
+	</ciManagement>
+
+	<properties>
+		<package-name>com.mycompany.imagej</package-name>
+		<main-class>com.mycompany.imagej.</main-class>
+		<license.licenseName>bsd_2</license.licenseName>
+		<license.CellularImaging>Zuckerman Institute, Columbia University</license.CellularImaging>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>imagej.public</id>
+			<url>http://maven.imagej.net/content/groups/public</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.imagej</groupId>
+			<artifactId>imagej</artifactId>
+		</dependency>
+	</dependencies>
+	<description>Zuckerman Institute scripts for brain analysis</description>
+	<artifactId>BrainJ</artifactId>
+</project>
