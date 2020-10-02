@@ -1,6 +1,6 @@
 # BrainJ - An accessible tool for automated brain reconstruction, mesoscale mapping, and cell analysis.
 
-![screenshot](./Images/BrainJ1.jpg)
+<img src="./Images/BrainJ1.jpg" width="800">
 
 ## About
 
@@ -21,8 +21,8 @@ in this folder to perform analysis and generate visualizations
 
 ## Usage
 
-# See the BrainJ Guide.pdf for step-by-step instructions
-![screenshot](./Images/BrainJ4.jpg)
+* __See the [BrainJ Guide.pdf](https://github.com/lahammond/BrainJ/blob/master/BrainJ%20Guide%209_3.pdf) for step-by-step instructions__
+<img src="./Images/BrainJ4.jpg" width="800">
 
 ## Limitations
 
