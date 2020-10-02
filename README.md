@@ -1,10 +1,8 @@
-# BrainJ
+# BrainJ - An accessible tool for automated brain reconstruction, mesoscale mapping, and cell analysis.
 
 ![screenshot](./Images/BrainJ1.jpg)
 
 ## About
-
-An accessible tool for automated brain reconstruction, mesoscale mapping, and cell analysis.
 
 Reconstructing serial tissue sections into whole brains and analyzing them within a common coordinate framework is an essential capability for the discovery of novel circuits and studies in neuroscience. Many existing solutions require coding experience, commercial software, or labor intensive interaction and annotation for researchers. With an emphasis on accessibility and automation, BrainJ enables high-throughput analysis of serial tissue sections imaged using confocal or widefield techniques. Developed in Fiji, our approach leverages freely available tools for machine learning pixel classification for cell detection and mesoscale mapping of axons and dendrites. With a simple graphical user interface, this approach is easy to deploy and use, requiring no coding experience and minimal manual intervention to process multiple datasets. Our approach is extensible to any project requiring serial section reconstruction and atlas-based analysis and allows a typical whole brain dataset to be reconstructed and analyzed within 2-4 hours.
 
@@ -23,8 +21,8 @@ in this folder to perform analysis and generate visualizations
 
 ## Usage
 
-* See the BrainJ Guide.pdf for step-by-step instructions
-![screenshot](./Images/BrainJ4.JPG)
+#* See the BrainJ Guide.pdf for step-by-step instructions
+![screenshot](./Images/BrainJ4.jpg)
 
 ## Limitations
 
