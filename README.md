@@ -21,7 +21,7 @@ in this folder to perform analysis and generate visualizations
 
 ## Usage
 
-#* See the BrainJ Guide.pdf for step-by-step instructions
+# See the BrainJ Guide.pdf for step-by-step instructions
 ![screenshot](./Images/BrainJ4.jpg)
 
 ## Limitations
@@ -30,7 +30,7 @@ in this folder to perform analysis and generate visualizations
 
 ## Similar Tools
 
-For Tissue Sections:
+For tissue sections:
 * [TissueMetrics](https://www.tissuemetrics.com/about)
 * [NeuroInfo](https://www.mbfbioscience.com/blog/tag/neuroinfo/)
 * [CellFinder](https://github.com/SainsburyWellcomeCentre/cellfinder)
@@ -40,7 +40,7 @@ For Tissue Sections:
 * [WholeBrain](http://www.wholebrainsoftware.org/)
 * [BrainPatterns](http://brainpatterns.compute.dtu.dk/)
 
-Visualization and other brain analysis tools:
+For whole brain data:
 * [ClearMap](https://idisco.info/clearmap-2/)
 * [Brainmapr](https://github.com/hms-dbmi/brainmapr)
 * [SMART](https://mjin1812.github.io/SMART/)
