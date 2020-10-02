@@ -1,4 +1,4 @@
-# BrainJ - ImageConvert Ultramicroscope acquistions to Big Stitcher projects
+# BrainJ
 
 ![screenshot](./images/BrainJ1.JPG)
 
