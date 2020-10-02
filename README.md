@@ -1,6 +1,6 @@
 # BrainJ
 
-![screenshot](./Images/BrainJ1.JPG)
+![screenshot](./Images/BrainJ1.jpg)
 
 ## About
 
