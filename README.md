@@ -1,6 +1,6 @@
 # BrainJ
 
-![screenshot](./images/BrainJ1.JPG)
+![screenshot](./Images/BrainJ1.JPG)
 
 ## About
 
@@ -18,13 +18,13 @@ Reconstructing serial tissue sections into whole brains and analyzing them withi
 * Install [Elastix 5.0.0](http://elastix.isi.uu.nl/download_links.php)
 * Install [Ilastix 1.3.3post3](https://www.ilastik.org/download.html)
 * Download the required [atlas files](https://www.dropbox.com/sh/z6au8vtauiaw9vt/AACyG_jIXxZN7mLdjyHJRJuba?dl=0) and [Ilastik project](https://www.dropbox.com/sh/dbu2uue8x5gwkbi/AABqgoFY_-KuMkwwXDEVzpoNa?dl=0)
-• Store the atlas files folder somewhere on your computer. The pipeline will use the files
+* Store the atlas files folder somewhere on your computer. The pipeline will use the files
 in this folder to perform analysis and generate visualizations
 
 ## Usage
 
 * See the BrainJ Guide.pdf for step-by-step instructions
-![screenshot](./images/BrainJ2.JPG)
+![screenshot](./Images/BrainJ4.JPG)
 
 ## Limitations
 
