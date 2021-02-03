@@ -3681,7 +3681,6 @@ function CreateABADensityHeatmapJS(Chan) {
 	} else {
 			
 		run("Region Density Heatmap Creation", "select=["+input+"] select_0=["+ProjectionDensityOut+"] select_1=["+AtlasDir+"] cell="+Chan+" atlassizex="+AtlasSizeX+" atlassizey="+AtlasSizeY+" atlassizez="+AtlasSizeZ);
-		stop
 		open(ProjectionDensityOut + "/C"+Chan+"_Region_Density_Heatmap.tif");
 		ResliceSagittalCoronal();	
 		saveAs("Tiff", ProjectionDensityOut + "/C"+Chan+"_Region_Density_Heatmap.tif");
