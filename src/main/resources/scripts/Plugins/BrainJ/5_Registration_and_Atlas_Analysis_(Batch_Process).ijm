@@ -540,7 +540,7 @@ if (AtlasAnalysisON == true) {
 					exec(runCmd);
 					
 					
-					if (File.exists(input + "5_Analysis_Output/Template_aligned/TransformParameters.1.txt")) {
+					if (File.exists(input + "5_Analysis_Output/Temp/Template_aligned/TransformParameters.1.txt")) {
 						print("     Template alignment successful on third attempt.");
 						AlignParamCheck = 2;
 					} else {
@@ -553,7 +553,7 @@ if (AtlasAnalysisON == true) {
 						exec(runCmd);
 						
 						
-						if (File.exists(input + "5_Analysis_Output/Template_aligned/TransformParameters.1.txt")) {
+						if (File.exists(input + "5_Analysis_Output/Temp/Template_aligned/TransformParameters.1.txt")) {
 							print("     Template alignment successful on final attempt.");
 							AlignParamCheck = 2;
 						} else {
@@ -2445,6 +2445,8 @@ function detectcellsfromprob(CellChan, MinInt, cellsize) {
 		run("Convert to Mask", "method=Default background=Dark black");
 		// watershed
 		run("Watershed", "stack");
+		// OPEN ROI MANAGER - bug in imagej if roi manager not open list can be empty? started april 2021
+		run("ROI Manager...");
 		//detect
 		if (IntVal == true) {
 			run("Analyze Particles...", "size=" +cellsize+ " circularity=0.1-1.00 clear add stack");
@@ -2574,7 +2576,7 @@ function detectcellsfromprob(CellChan, MinInt, cellsize) {
 		for(j=0; j<CountROI; j++){ 
 			print(WriteOut, XCoordinate[j]+","+YCoordinate[j]+","+ZCoordinate[j]+","+MeasMeanInt1[j]+","+MeasMeanInt2[j]+","+MeasMeanInt3[j]+","+MeasMeanInt4[j]);
 		} 
-
+	
 		// 5) Close file
 		File.close(WriteOut);
 			
@@ -3100,7 +3102,7 @@ function AnnotatePoints (PointsIn, AtlasAnnotationImg, AtlasAnnotationCSV, Measu
 	//Create a annotated table -- update later to include region names
 
 	// Set a filename:
-	CellFileOut =  AnnotatedOut;
+	CellFileOut = AnnotatedOut;
 	
 	// 1) Delete file if it exists - otherwise can produce error:
 	if (File.exists(CellFileOut) ==1 ) {
@@ -3125,6 +3127,7 @@ function AnnotatePoints (PointsIn, AtlasAnnotationImg, AtlasAnnotationCSV, Measu
 		//BregmaDV = ((YPos[i]*25)-470)*-1;
 		//BregmaML = XPos[i]*25-5700;
 		//print(WriteOut, XPos[i]+","+YPos[i]+","+ZPos[i]+","+Z_Dither[i]+","+BregmaAP+","+BregmaDV+","+BregmaML+","+MeanIntCh1[i]+","+MeanIntCh2[i]+","+MeanIntCh3[i]+","+MeanIntCh4[i]+","+HemisphereArray[i]+","+MeanMeasurements[i]);
+		
 		print(WriteOut, XPos[i]+","+YPos[i]+","+ZPos[i]+","+Z_Dither[i]+","+MeanIntCh1[i]+","+MeanIntCh2[i]+","+MeanIntCh3[i]+","+MeanIntCh4[i]+","+HemisphereArray[i]+","+MeanMeasurements[i]);
 	} 
 
@@ -4118,7 +4121,7 @@ function measure_int_manual_cells(CellChan) {
 		print("     Cell analysis for channel "+CellChan+" already performed. If you wish to rerun, delete directory: "+input + "5_Analysis_Output/Cell_Analysis/");
 	} else {
 
-		DeleteFile(CellCountOut + "Cell_Points_Ch"+CellChan+".csv");
+		//DeleteFile(CellCountOut + "Cell_Points_Ch"+CellChan+".csv");
 		DeleteFile(CellIntensityOut + "Cell_Points_with_intensities_Ch"+CellChan+".csv");
 	
 	
@@ -4143,6 +4146,7 @@ function measure_int_manual_cells(CellChan) {
 			YCoordinate[j] = getResult("C2", j);
 			ZCoordinate[j] = getResult("C3", j);
 		}
+		
 		run("Input/Output...", "jpeg=100 gif=-1 file=.csv use use_file");
 		close("Results");
 	
