@@ -24,8 +24,8 @@ run("Colors...", "foreground=white background=black selection=yellow");
 run("Clear Results"); 
 run("Close All");
 
-BrainJVer ="BrainJ 0.9.98";
-ReleaseDate= "December 20, 2020";
+BrainJVer ="BrainJ 0.9.99";
+ReleaseDate= "April 19, 2021";
 
 #@ File[] listOfPaths(label="Select experiment/brain folders:", style="both")
 #@ File(label="Select template/annotation direcotry to be used (e.g. ABA CCF 2017):", style="directory") AtlasDir

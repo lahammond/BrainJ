@@ -30,8 +30,8 @@ run("Colors...", "foreground=white background=black selection=yellow");
 run("Clear Results"); 
 run("Close All");
 
-BrainJVer ="BrainJ 0.9.98";
-ReleaseDate= "December 20, 2020";
+BrainJVer ="BrainJ 0.9.99";
+ReleaseDate= "April 19, 2021";
 
 
 // Select input directories
