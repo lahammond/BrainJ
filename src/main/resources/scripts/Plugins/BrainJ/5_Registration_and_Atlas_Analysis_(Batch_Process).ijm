@@ -81,6 +81,9 @@ if (GPU_ON == true) {
 	
 }
 
+// OPEN ROI MANAGER - bug in imagej if roi manager not open list can be empty? started april 2021
+run("ROI Manager...");
+
 setBatchMode(true);
 
 //Visualization options
@@ -2230,8 +2233,7 @@ function EnhanceAndFindMaxima(CellChan, MaximaInt) {
 		
 		collectGarbage(Dslices, 4);
 		rename("Stack");
-		// OPEN ROI MANAGER - bug in imagej if roi manager not open list can be empty? started april 2021
-		run("ROI Manager...");
+
 		print("  Detecting cells...");
 		// Find maxima only works on 1 image 
 		MaximaSlices = nSlices();
