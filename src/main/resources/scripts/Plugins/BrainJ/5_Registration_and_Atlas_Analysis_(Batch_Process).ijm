@@ -4157,23 +4157,27 @@ function measure_int_manual_cells(CellChan) {
 		print("    Measuring intensities...");
 		for(chl=1; chl<5; chl++) {
 			
+
 			if (File.exists(RegDir + chl) && chl != AlignCh ) {
 	 			//open the stack
 	 			RawSections = getFileList(RegDir +chl);
 	 			RawSections = Array.sort( RawSections );
 	 			Section1 = RawSections[0];
 	 			run("Image Sequence...", "open=["+ RegDir + chl + "/" + Section1 + "] scale=100 sort");
+	 			run("Properties...", "pixel_width=1 pixel_height=1 voxel_depth=1");
 	 			
 	 			rename("RawStack");
 	 			getDimensions(Drwidth, Drheight, DrChNum, Drslices, Drframes);
 	 			run("Set Measurements...", "mean redirect=None decimal=3");
 	
 	 			// for each ROI
+	 			setTool("point");
 	 			for(n=0; n<CountROI;n++) { 
 					setSlice(ZCoordinate[n]);
-					makePoint(XCoordinate[n], XCoordinate[n], "medium yellow hybrid");
+					makePoint(XCoordinate[n], YCoordinate[n], "medium yellow hybrid");
 					run("Measure");
 				}
+
 				if (chl == 1) {
 					print("    Measuring intensities for channel " + chl);
 					MeasMeanInt1 = newArray(CountROI);
