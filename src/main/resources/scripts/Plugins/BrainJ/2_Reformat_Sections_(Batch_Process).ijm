@@ -30,8 +30,8 @@ run("Colors...", "foreground=white background=black selection=yellow");
 run("Clear Results"); 
 run("Close All");
 
-BrainJVer ="BrainJ 0.9.99";
-ReleaseDate= "April 19, 2021";
+BrainJVer ="BrainJ 1.0.0";
+ReleaseDate= "May 20, 2021";
 
 
 // Select input directories
@@ -145,6 +145,7 @@ for (FolderNum=0; FolderNum<listOfPaths.length; FolderNum++) {
 				//}
 			}
 
+			print("");
 			print("  Largest canvas required = "+CanvasWidth+" x "+CanvasHeight+". ");
 		
 			//Reformat Series
@@ -1051,23 +1052,37 @@ function LargestCanvas(input) {
 	files = ImageFilesOnlyArray(files);		
 	files = Array.sort( files );
 	for(i=0; i<files.length; i++) {				
-		image = files[i];	
-		run("Bio-Formats Importer", "open=[" + input + image + "] color_mode=Default display_metadata rois_import=[ROI manager] view=[Metadata only] stack_order=Default");
-		selectWindow("Original Metadata - " + image );
-		saveAs( "Results", input + "temp_metadata.txt" );
-		selectWindow("Original Metadata - " + image );
-		run("Close");
+			
+		run("Bio-Formats Macro Extensions");
+		Ext.setId(input + files[i]);
+		Ext.getSizeX(CanvasSizeX)
+		Ext.getSizeY(CanvasSizeY)
+		Ext.getSizeC(TotalChannels)
+		
+		Ext.close();
+		
+		
+		
+		
+		
+		//run("Bio-Formats Importer", "open=[" + input + image + "] color_mode=Default display_metadata rois_import=[ROI manager] view=[Metadata only] stack_order=Default");
+		//selectWindow("Original Metadata - " + image );
+		//saveAs( "Results", input + "temp_metadata.txt" );
+		//selectWindow("Original Metadata - " + image );
+		//run("Close");
 
 		// NOTE! Was using SizeX and SizeY in Metadata- BUT if people edit the image before the 
 		// pipeline then it will think the images are much bigger htan they are. So check if edited in ImageJ
 		// In images opened by ImageJ there will be a line beginning Width: and Height: at end of metadata
 		// Just taking first SizeX and SizeY seems to address all issues.
-		XFound = 0;
-		YFound = 0;
-		CFound = 0;
 		
-		Metadata = split( File.openAsString( input + "temp_metadata.txt" ), "\n" );
+		//XFound = 0;
+		//YFound = 0;
+		//CFound = 0;
 		
+		//Metadata = split( File.openAsString( input + "temp_metadata.txt" ), "\n" );
+
+		/*
 		for(meta=0; meta<Metadata.length; meta++){ 
 			if(matches(Metadata[meta],".* SizeX.*") == 1 && matches(Metadata[meta],".*VoxelSizeX.*") == 0 && XFound == 0 ) {
 				SizeXRow=Metadata[meta];
@@ -1090,14 +1105,14 @@ function LargestCanvas(input) {
 			}
 			
 		}
-		
+		*/
 		if (CanvasSizeX > FinalCanvasSizeX) {
 			FinalCanvasSizeX = CanvasSizeX;
 		}
 		if (CanvasSizeY > FinalCanvasSizeY) {
 			FinalCanvasSizeY = CanvasSizeY;
 		}
-	
+		print("  File = " +files[i]+ "   Width = " + CanvasSizeX + "   Height = " + CanvasSizeY);
 	}
 	
 		

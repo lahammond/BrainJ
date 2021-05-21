@@ -24,8 +24,8 @@ run("Colors...", "foreground=white background=black selection=yellow");
 run("Clear Results"); 
 run("Close All");
 
-BrainJVer ="BrainJ 0.9.99";
-ReleaseDate= "April 19, 2021";
+BrainJVer ="BrainJ 1.0.0";
+ReleaseDate= "May 20, 2021";
 
 #@ File[] listOfPaths(label="Select experiment/brain folders:", style="both")
 #@ File(label="Select template/annotation direcotry to be used (e.g. ABA CCF 2017):", style="directory") AtlasDir
@@ -244,6 +244,7 @@ for (FolderNum=0; FolderNum<listOfPaths.length; FolderNum++) {
 	//Additional Parameters	
 			AlignParamCheck = 0;
 			CellPlotCheck = 0;
+			VisRegCheck = 0;
 			random("seed", 1);
         
 /////////////////// STEP 1: SECTION REGISTRATION /////////////////////////////////////////////////////////////
@@ -560,6 +561,7 @@ if (AtlasAnalysisON == true) {
 							print("     Template alignment successful on final attempt.");
 							AlignParamCheck = 2;
 						} else {
+							AlignParamCheck = 3;
 							exit("Alignment to template failed. Please check quality of the dataset and correct or replace any damaged sections.") ;
 						}
 					}
@@ -571,66 +573,68 @@ if (AtlasAnalysisON == true) {
 		//Count number of registered slices
 		RegSectionsCount = getFileList(input+ "/3_Registered_Sections/1/");	
 		RegSectionsCount = RegSectionsCount.length;
-
-		// import transformed template
-		run("MHD/MHA...", "open=["+ input + "5_Analysis_Output/Temp/Template_aligned/result.1.mhd]");
-		run("Enhance Contrast...", "saturated=0.01 process_all use");
-		run("Apply LUT", "stack");
-		if (OutputType == "Sagittal") {
-			ResliceSagittalCoronal();
-		}
-		rename("Result");
-
-		// import experiment dataset
-		open(RegDir + "DAPI_25.tif");
-		run("Enhance Contrast...", "saturated=0.01 process_all use");
-		run("Apply LUT", "stack");
-		if (OutputType == "Sagittal") {
-			ResliceSagittalCoronal();
-		}
-		rename("ExpBrain");
-
-		//Merge and save
-		run("Merge Channels...", "c1=ExpBrain c2=Result create");
-		run("Size...", "depth="+RegSectionsCount+" interpolation=None");
-		saveAs("Tiff", input + "5_Analysis_Output/Template_Brain_Aligned.tif");
-		close("Template_Brain_Aligned.tif");
-		
-		//Clean up
-		a = File.rename(input + "5_Analysis_Output/Temp/Template_aligned/TransformParameters.1.txt", input + "5_Analysis_Output/Transform_Parameters/Cell_TransformParameters.1.txt");
-		a = File.copy(input + "5_Analysis_Output/Temp/Template_aligned/TransformParameters.0.txt", input + "5_Analysis_Output/Transform_Parameters/Cell_TransformParameters.0.txt");
-		UpdateTransParamLocation0 (input + "5_Analysis_Output/Transform_Parameters/Cell_TransformParameters.1.txt");
-		
-		DeleteFile(input+"Elastixrun.bat");
-		collectGarbage(10, 4);
-
-		//DONT Delete Template Aligned until you have moved AFFINE transform parameters AND edited CELL_Transformparameters to contain this new location
-		DeleteDir(input + "5_Analysis_Output/Temp/Template_aligned/");
-		
-		}
-		AAendtime = getTime();
-		dif = (AAendtime-AAstarttime)/1000;
-		print("Atlas registration processing time: ", (dif/60), " minutes.");	
-
-	//Transform Origin Point
-	print("Transforming origin points to atlas...");
-	if (File.exists(input + "5_Analysis_Output/Transform_Parameters/OriginPoints/Origin_Output_Points.csv")) {
-		print("  Origin points have already been transformed.");
-	} else {
-					
-		TransformOriginCmd = Transformix +" -def "+OriginPoints+" -tp "+TransP+" -out "+OriginOut;
-		
-		CreateBatFile (TransformOriginCmd, input, "TransformixRun");
-		runCmd = CreateCmdLine(input + "TransformixRun.bat");
-		exec(runCmd);
-		print("  Origin points successfully transformed to atlas space.");
-		print("     ");
-		//CleanUp Origin Point to .csv
-		
-
-		E49TransPointsToZYXcsv(input + "5_Analysis_Output/Transform_Parameters/OriginPoints/outputpoints.txt", input + "5_Analysis_Output/Transform_Parameters/OriginPoints", "Origin_Output_Points");
-		}
-	print("---------------------------------------------------------------------------------------------------------------------");
+				
+		if (AlignParamCheck < 3) {
+			// import transformed template
+			run("MHD/MHA...", "open=["+ input + "5_Analysis_Output/Temp/Template_aligned/result.1.mhd]");
+			run("Enhance Contrast...", "saturated=0.01 process_all use");
+			run("Apply LUT", "stack");
+			if (OutputType == "Sagittal") {
+				ResliceSagittalCoronal();
+			}
+			rename("Result");
+	
+			// import experiment dataset
+			open(RegDir + "DAPI_25.tif");
+			run("Enhance Contrast...", "saturated=0.01 process_all use");
+			run("Apply LUT", "stack");
+			if (OutputType == "Sagittal") {
+				ResliceSagittalCoronal();
+			}
+			rename("ExpBrain");
+	
+			//Merge and save
+			run("Merge Channels...", "c1=ExpBrain c2=Result create");
+			run("Size...", "depth="+RegSectionsCount+" interpolation=None");
+			saveAs("Tiff", input + "5_Analysis_Output/Template_Brain_Aligned.tif");
+			close("Template_Brain_Aligned.tif");
+			
+			//Clean up
+			a = File.rename(input + "5_Analysis_Output/Temp/Template_aligned/TransformParameters.1.txt", input + "5_Analysis_Output/Transform_Parameters/Cell_TransformParameters.1.txt");
+			a = File.copy(input + "5_Analysis_Output/Temp/Template_aligned/TransformParameters.0.txt", input + "5_Analysis_Output/Transform_Parameters/Cell_TransformParameters.0.txt");
+			UpdateTransParamLocation0 (input + "5_Analysis_Output/Transform_Parameters/Cell_TransformParameters.1.txt");
+			
+			DeleteFile(input+"Elastixrun.bat");
+			collectGarbage(10, 4);
+	
+			//DONT Delete Template Aligned until you have moved AFFINE transform parameters AND edited CELL_Transformparameters to contain this new location
+			DeleteDir(input + "5_Analysis_Output/Temp/Template_aligned/");
+			
+			}
+			AAendtime = getTime();
+			dif = (AAendtime-AAstarttime)/1000;
+			print("Atlas registration processing time: ", (dif/60), " minutes.");	
+	
+		//Transform Origin Point
+		print("Transforming origin points to atlas...");
+		if (File.exists(input + "5_Analysis_Output/Transform_Parameters/OriginPoints/Origin_Output_Points.csv")) {
+			print("  Origin points have already been transformed.");
+		} else {
+						
+			TransformOriginCmd = Transformix +" -def "+OriginPoints+" -tp "+TransP+" -out "+OriginOut;
+			
+			CreateBatFile (TransformOriginCmd, input, "TransformixRun");
+			runCmd = CreateCmdLine(input + "TransformixRun.bat");
+			exec(runCmd);
+			print("  Origin points successfully transformed to atlas space.");
+			print("     ");
+			//CleanUp Origin Point to .csv
+			
+	
+			E49TransPointsToZYXcsv(input + "5_Analysis_Output/Transform_Parameters/OriginPoints/outputpoints.txt", input + "5_Analysis_Output/Transform_Parameters/OriginPoints", "Origin_Output_Points");
+			}
+		print("---------------------------------------------------------------------------------------------------------------------");
+	}
 }
 
 
@@ -800,7 +804,7 @@ if (ProjectionTransformationON == true && ProjDetMethod == "Binary Threshold") {
 
 // Resample for resolution and correct columns XYZ to ZYX for detected cells
 
-if (CellAnalysisON == true && CellDetMethod != "No Cell Analysis") {	
+if (CellAnalysisON == true && CellDetMethod != "No Cell Analysis" && AlignParamCheck < 3) {	
 	print("Resampling cell locations to atlas...");
 
 	if (File.exists(input + "5_Analysis_Output/Transform_Parameters/Cell_TransformParameters.1.txt") == 0 ) {
@@ -990,7 +994,7 @@ if (CellAnalysisON == true && CellDetMethod != "No Cell Analysis") {
 
 /////////////////// STEP 3C: CREATE CELL ANALYSIS VISUALIZATIONS /////////////////////////////////////////////////////////////////////////////////////////////////
 
-if (CreateCellAnalysisVisON == true) {
+if (CreateCellAnalysisVisON == true && AlignParamCheck < 3) {
 	
 	// Create voxelisation of points in template brain 
 	CHMstarttime = getTime();
@@ -1066,7 +1070,7 @@ if (CreateCellAnalysisVisON == true) {
 
 /////////////////// STEP 4: PERFORM PROJECTION ANALYSIS /////////////////////////////////////////////////////////////////////////////////////////////////
 
-if (ProjectionTransformationON == true && ProjDetMethod != "No Projection Analysis") {	
+if (ProjectionTransformationON == true && ProjDetMethod != "No Projection Analysis" && AlignParamCheck < 3) {	
 
 	print("Performing projection density analysis...");
 
@@ -1094,7 +1098,7 @@ if (ProjectionTransformationON == true && ProjDetMethod != "No Projection Analys
 	close("*");
 }
 
-if (CreateABADensityHeatmapON == true && ProjDetMethod != "No Projection Analysis" ) {
+if (CreateABADensityHeatmapON == true && ProjDetMethod != "No Projection Analysis" && AlignParamCheck < 3) {
 	HMstarttime = getTime();
 	AlignDir = input + "5_Analysis_Output/";
 	print("Creating atlas density heatmaps...");
@@ -1128,44 +1132,53 @@ if (AtlasType == "Spinal Cord") {
 	CreateColorDensityImagesON = false;
 }
 	
-if (CreateColorDensityImagesON == true && ProjDetMethod != "No Projection Analysis") {
+if (CreateColorDensityImagesON == true && ProjDetMethod != "No Projection Analysis" && AlignParamCheck < 3) {
 	CDstarttime = getTime();
 	print("Creating atlas colored projection density images...");
 	
-	PerformReverseTransformationForProjections();
+	VisRegCheck = PerformReverseTransformationForProjections();
 	
 	File.mkdir(TransformedProjectionDataOut);
-	
-	for (Ch_i = 0; Ch_i < 3; Ch_i++) {
-		if (ProChans[Ch_i] > 0) {
-			//after running test that it can perform if files missing for registered direcotry
-			TransformBinaryDataToAtlas(ProChans[Ch_i]);
-			createColorProjections(ProChans[Ch_i]);
-	 		OverlayColorProjectionsOnTemplate(TransformedProjectionDataOut+"C"+ProChans[Ch_i]+"_Atlas_Colored_Projections.tif", ProChans[Ch_i], TransformedProjectionDataOut);
-		}	
-	} 	 	
-	CDendtime = getTime();
-	dif = (CDendtime-CDstarttime)/1000;
-	print("Atlas colored projection density image creation: ", (dif/60), " minutes.");	
-	print("---------------------------------------------------------------------------------------------------------------------");	
+	if (VisRegCheck == 0) {	
+		for (Ch_i = 0; Ch_i < 3; Ch_i++) {
+			if (ProChans[Ch_i] > 0) {
+				//after running test that it can perform if files missing for registered direcotry
+				VisRegCheck = TransformBinaryDataToAtlas(ProChans[Ch_i]);
+				if (VisRegCheck == 0) {	
+					createColorProjections(ProChans[Ch_i]);				
+				 	OverlayColorProjectionsOnTemplate(TransformedProjectionDataOut+"C"+ProChans[Ch_i]+"_Atlas_Colored_Projections.tif", ProChans[Ch_i], TransformedProjectionDataOut);
+				}
+				}
+			}	
+		} 	 	
+		CDendtime = getTime();
+		dif = (CDendtime-CDstarttime)/1000;
+		print("Atlas colored projection density image creation: ", (dif/60), " minutes.");	
+		print("---------------------------------------------------------------------------------------------------------------------");	
+	} else {
+		print("Atlas colored projection density images could not be created. Check registration quality.");	
+		print("---------------------------------------------------------------------------------------------------------------------");	
+
+	}
 }	
 
 /////////////////// STEP 6: TRANSFORM RAW DATA TO ABA /////////////////////////////////////////////////////////////////////////////////////////////////
 
-if (RawChannelTransformON == true) {	
+if (RawChannelTransformON == true && AlignParamCheck < 3) {	
 
 	if (AtlasType == "Spinal Cord") {
 		//print("Transforming raw data into atlas space not currently available for spinal cord data.");
 
 
 	} else {
-		TransformRawDataToAtlas();
+		
+		VisRegCheck = TransformRawDataToAtlas();
 	}	
 	 		
 }
 		  
 /////////////////// STEP 5: PERFORM INTENSITY MEASUREMENTS IN ANNOTATED REGIONS /////////////////////////////////////////////////////////////////////////////////////////////////
-if (IntensityMeasureInABAON == true) {
+if (IntensityMeasureInABAON == true && AlignParamCheck < 3) {
 	//Count number of channel folders in Registered Directory
 	
 	print("Performing intensity measurements in annotated regions...");
@@ -1206,7 +1219,7 @@ close("*");
 
 /////////////////// STEP 5B: CREATE INTENSITY MAPS /////////////////////////////////////////////////////////////////////////////////////////////////
 
-if (CreateIntensityMapsON == true) {
+if (CreateIntensityMapsON == true && AlignParamCheck < 3) {
 	HMstarttime = getTime();
 	
 	//Count number of channel folders in Registered Directory
@@ -1232,7 +1245,7 @@ if (CreateIntensityMapsON == true) {
 
 /////////////////// STEP 7: EXTRACT SPECIFIC REGIONS AT FULL RESOLUTION /////////////////////////////////////////////////////////////////////////////////////////////////
 
-if (FullResExtractON == true) {
+if (FullResExtractON == true && AlignParamCheck < 3) {
 	// Make sure annotations have been trasnformed.
 	TransformAnnotationDataset();
 	// Extract each region.
@@ -1253,16 +1266,31 @@ print("-------------------------------------------------------------------------
 print("- - - " +BrainJVer+ " - - -");
 print("---------------------------------------------------------------------------------------------------------------------");
 
-if (AlignParamCheck > 0) {
+if (AlignParamCheck == 3) {
+	print("***Warning: Alignment to template brain failed all three attempts.");
+	print("   Please check quality of the dataset and correct or replace any damaged sections.");
+	print("");
+}
+
+if (AlignParamCheck > 0 && AlignParamCheck < 3) {
 	print("***Note: Initial alignment to template brain using strict parameters failed.");
 	print("   More lenient parameters were used and were successful but alignment may not be ideal. This is typically due to damaged sections"); 
 	print("   Please check quality of the registration by inspecting the Template_Brain_Aligned.tif image and correct or replace any damaged sections.");
+	print("");
+}
+
+if (VisRegCheck > 0) {
+	print("***Warning: Registration process for generating visualizations of raw data and projections in atlas space failed.");
+	print("   Visualizations of projections and raw data in atlas space won't be available but all other analysis is unaffected");
+	print("   To resolve this issue, check \5_Analysis_Output\template_brain_aligned.tif and explore ways to improve registration (e.g. replace damaged sections)");
+	print("");
 }
 
 if (CellPlotCheck > 0) {
 	print("***Note: "+CellPlotCheck+" cells could not be plotted into the atlas.");
 	print("   This is likely due to the inaccuracies in the registration, especially towards the posterior edge of the cerebellum."); 
 	print("   If you are seeing this message check the quality of the registration by inspecting the Template_Brain_Aligned.tif image.");
+	print("");
 }
 selectWindow("Log");
 // time stamp log to prevent overwriting.
@@ -3203,43 +3231,48 @@ function createColorProjections(Channel) {
 	IndexOrigin=parseInt(getResult("Z", 0));
 	IndexEnd=parseInt(getResult("Z", 1));
 	close("Results");
-
-	open(TransformedProjectionDataOut + "C"+Channel+"_binary_projection_data_in_atlas_space.tif");
-
-	rename("ExpProjections");
-
-	run("Divide...", "value=255 stack");
-		
-	run("Duplicate...", "title=ExpProjections-Part2 duplicate");
-	run("Duplicate...", "title=ExpProjections-Part3 duplicate");
-	run("Merge Channels...", "c1=ExpProjections c2=ExpProjections-Part2 c3=ExpProjections-Part3 create");
-	rename("ExpProjections");
+	if (File.exists(TransformedProjectionDataOut + "C"+Channel+"_binary_projection_data_in_atlas_space.tif")) {
+ 
+		open(TransformedProjectionDataOut + "C"+Channel+"_binary_projection_data_in_atlas_space.tif");
 	
-	// import atlas
-	open(AtlasDir + "Annotation_Color.tif");
-	rename("ColorAnnotations");
-		
-		
-	imageCalculator("Multiply create stack", "ExpProjections","ColorAnnotations");
-	close("ExpProjections");
-	close("ColorAnnotations");
-	selectWindow("Result of ExpProjections");
-	Stack.setChannel(1)
-	setMinAndMax(0, 255);
-	Stack.setChannel(2)
-	setMinAndMax(0, 255);
-	Stack.setChannel(3)
-	setMinAndMax(0, 255);
-	run("8-bit");
-	run("RGB Color", "slices");
-	if (OutputType == "Sagittal") {
-		ResliceSagittalCoronal();
-	}
-	saveAs("Tiff", TransformedProjectionDataOut + "C"+Channel+"_Atlas_Colored_Projections.tif");
+		rename("ExpProjections");
 	
-	close();
-	//close("Colored_Projections"+Channel+".tif");
+		run("Divide...", "value=255 stack");
+			
+		run("Duplicate...", "title=ExpProjections-Part2 duplicate");
+		run("Duplicate...", "title=ExpProjections-Part3 duplicate");
+		run("Merge Channels...", "c1=ExpProjections c2=ExpProjections-Part2 c3=ExpProjections-Part3 create");
+		rename("ExpProjections");
+		
+		// import atlas
+		open(AtlasDir + "Annotation_Color.tif");
+		rename("ColorAnnotations");
+			
+			
+		imageCalculator("Multiply create stack", "ExpProjections","ColorAnnotations");
+		close("ExpProjections");
+		close("ColorAnnotations");
+		selectWindow("Result of ExpProjections");
+		Stack.setChannel(1)
+		setMinAndMax(0, 255);
+		Stack.setChannel(2)
+		setMinAndMax(0, 255);
+		Stack.setChannel(3)
+		setMinAndMax(0, 255);
+		run("8-bit");
+		run("RGB Color", "slices");
+		if (OutputType == "Sagittal") {
+			ResliceSagittalCoronal();
+		}
+		saveAs("Tiff", TransformedProjectionDataOut + "C"+Channel+"_Atlas_Colored_Projections.tif");
+		
+		close();
+		//close("Colored_Projections"+Channel+".tif");
+		} else {
+			VisRegCheck = 1;
+		}
 	}
+//return VisRegCheck;
 
 }
 
@@ -3666,8 +3699,9 @@ function OverlayColorCellsOnTemplate(Cells, Channel, OutputDir) {
 	
 
 	run("Merge Channels...", "c1=Red c2=Green c3=Blue create");
-
+	run("Properties...", "pixel_width=25.0000 pixel_height=25.0000 voxel_depth=25.0000");
 	saveAs("Tiff", OutputDir + "/C"+Channel+"_Atlas_Colored_Cells_Template_Overlay.tif");
+	
 	if (AtlasType != "Spinal Cord") {
 		run("3D Project...", "projection=[Brightest Point] axis=Y-Axis slice=25 initial=0 total=360 rotation=10 lower=1 upper=255 opacity=0 surface=100 interior=50");
 		saveAs("Tiff", OutputDir + "/C"+Channel+"_Atlas_Colored_Cells_Template_Overlay_3D.tif");
@@ -4554,120 +4588,131 @@ function TransformRawDataToAtlas() {
 	print("Creating "+AtlasResXY+"um isotropic volumes...");
 		
 	SPstarttime = getTime();
-	for(j=1; j<ChNum+1; j++) {	
-		Sections = getFileList(input+"/3_Registered_Sections/"+j);
-		//print(" Creating "+ProAnRes+"um lateral with "+ProAnResSection+" section thickness volumes with raw data for channel "+j);		
-		//coronalto3Dsagittal(input + "3_Registered_Sections/" +j, input+"/3_Registered_Sections", "C"+j+"_Sagittal", ProAnRes, ZCut);
-		
-		print(" Creating "+AtlasResXY+"um lateral with "+AtlasResZ+" section thickness volumes with raw data for channel "+j); 	
-		coronalto3Dsagittal(RegDir +j, input+"/3_Registered_Sections", "C"+j+"_25", AtlasResXY, ZCut);
 
-		if (File.exists(input + "4_Processed_Sections/Enhanced/" +j)) {
-				EnSectionsCount = getFileList(input + "4_Processed_Sections/Enhanced/" +j);	
-				if (RegSectionsCount == EnSectionsCount.length){
-					//print(" Creating "+ProAnRes+"um lateral with "+ProAnResSection+" section thickness volumes with background subtracted data for channel "+j);
-					print(" Creating "+AtlasResXY+"um lateral with "+AtlasResZ+" section thickness volumes with background subtracted data for channel "+j);
-					//coronalto3Dsagittal(input + "4_Processed_Sections/Enhanced/" +j, input+"/3_Registered_Sections", "C"+j+"_SagittalBGSub", ProAnRes, ZCut);
-					coronalto3Dsagittal(input + "4_Processed_Sections/Enhanced/" +j, input+"/3_Registered_Sections", "C"+j+"_25_BGSub", AtlasResXY, ZCut);
-				}
-		}
-				
-		
-		collectGarbage(10, 4);
-	}
-	SPendtime = getTime();
-	dif = (SPendtime-SPstarttime)/1000;
-	print("Raw sagittal image creation processing time: ", (dif/60), " minutes.");
-	print("---------------------------------------------------------------------------------------------------------------------");
-		
+	if (File.exists(input + "5_Analysis_Output/Transform_Parameters/RawDataTransformParameters.txt")) {
 
-	//Transform images to ABA space
-	TBstarttime = getTime();
-
-	File.mkdir(input + "5_Analysis_Output/Temp/Transformed_Raw_Out");
-	File.mkdir(TransformedRawDataOut);
-	
-	
-	InvTransPModRawData = CreateCmdLine(input + "5_Analysis_Output/Transform_Parameters/RawDataTransformParameters.txt");
-	
-	open(input + "5_Analysis_Output/Transform_Parameters/OriginPoints/Origin_Output_Points.csv");
-	Table.rename(Table.title, "Results");
-	IndexOrigin=parseInt(getResult("Z", 0));
-	IndexEnd=parseInt(getResult("Z", 1));
-	close("Results");
-	
-	for(j=1; j<ChNum+1; j++) {	
-		print("Transforming raw data for channel "+j+" to atlas space...");
-
-		if (File.exists(TransformedRawDataOut+"C"+j+"_raw_data_in_atlas_space.tif")) {
-			print("     Projection density heatmap already created. If you wish to rerun, delete : \n     "+TransformedRawDataOut+"C"+j+"_raw_data_in_atlas_space.tif");
-		} else {
-	
-					
-			TransformedRawData = input + "5_Analysis_Output/Temp/Transformed_Raw_Out/result.mhd";
-			RawImageForTrans = CreateCmdLine(RegDir + "C"+j+"_25.tif");
-			TempTransImageOut = CreateCmdLine(input + "5_Analysis_Output/Temp/Transformed_Raw_Out");
-	
-			TransformCmd = Transformix +" -in "+RawImageForTrans+" -tp "+InvTransPModRawData+" -out "+TempTransImageOut;
+		for(j=1; j<ChNum+1; j++) {	
+			Sections = getFileList(input+"/3_Registered_Sections/"+j);
+			//print(" Creating "+ProAnRes+"um lateral with "+ProAnResSection+" section thickness volumes with raw data for channel "+j);		
+			//coronalto3Dsagittal(input + "3_Registered_Sections/" +j, input+"/3_Registered_Sections", "C"+j+"_Sagittal", ProAnRes, ZCut);
 			
-			CreateBatFile (TransformCmd, input, "TransformixRun");
-			runCmd = CreateCmdLine(input + "TransformixRun.bat");
-			exec(runCmd);
-			print(" Image transformation complete.");
-			print("   ");
-			
-			run("MHD/MHA...", "open=["+ TransformedRawData+"]");
-			
-			rename("RawData");
-			setMinAndMax(0, 65535);
-			run("16-bit");
-			resetMinAndMax();
-			
-			//if (ProAnRes != 25) {
-			//	makeRectangle((parseInt(IndexOrigin*(1/(ProAnRes/25)))+parseInt(6*(1/(ProAnRes/25)))), 0, (parseInt(IndexEnd*(1/(ProAnRes/25)))-parseInt(IndexOrigin*(1/(ProAnRes/25)))-parseInt(6*(1/(ProAnRes/25)))), parseInt(320*(1/(ProAnRes/25))));
-			//	
-			//} else {
-				//crop out density analysis region - currently using -5 to be conservative, potentially use better origin points
-		 	ResliceSagittalCoronal();
-		 	
-		 	makeRectangle((IndexOrigin+Trim), 0, (IndexEnd-IndexOrigin-Trim), AtlasSizeY);
-
-		 		 		 		
-			//}
-			run("Clear Outside", "stack");
-			run("Select None");
-
-			ResliceSagittalCoronal();
-			rename("RawData");
-			
-			//Open template make binary and multipy with raw data to clean up
-			open(AtlasDir + "Template.tif");
-			rename("Template");
+			print(" Creating "+AtlasResXY+"um lateral with "+AtlasResZ+" section thickness volumes with raw data for channel "+j); 	
+			coronalto3Dsagittal(RegDir +j, input+"/3_Registered_Sections", "C"+j+"_25", AtlasResXY, ZCut);
 	
-			setMinAndMax(7, 7);
-			run("Apply LUT", "stack");
-			run("8-bit");
-			run("Subtract...", "value=254 stack");
-			imageCalculator("Multiply create stack", "RawData","Template");
-			selectWindow("Result of RawData");
-			if (OutputType == "Sagittal") {
-				ResliceSagittalCoronal();
+			if (File.exists(input + "4_Processed_Sections/Enhanced/" +j)) {
+					EnSectionsCount = getFileList(input + "4_Processed_Sections/Enhanced/" +j);	
+					if (RegSectionsCount == EnSectionsCount.length){
+						//print(" Creating "+ProAnRes+"um lateral with "+ProAnResSection+" section thickness volumes with background subtracted data for channel "+j);
+						print(" Creating "+AtlasResXY+"um lateral with "+AtlasResZ+" section thickness volumes with background subtracted data for channel "+j);
+						//coronalto3Dsagittal(input + "4_Processed_Sections/Enhanced/" +j, input+"/3_Registered_Sections", "C"+j+"_SagittalBGSub", ProAnRes, ZCut);
+						coronalto3Dsagittal(input + "4_Processed_Sections/Enhanced/" +j, input+"/3_Registered_Sections", "C"+j+"_25_BGSub", AtlasResXY, ZCut);
+					}
 			}
+					
 			
-			saveAs("Tiff", TransformedRawDataOut+"C"+j+"_raw_data_in_atlas_space.tif");
-			close("*");
+			collectGarbage(10, 4);
 		}
+		SPendtime = getTime();
+		dif = (SPendtime-SPstarttime)/1000;
+		print("Raw sagittal image creation processing time: ", (dif/60), " minutes.");
+		print("---------------------------------------------------------------------------------------------------------------------");
 			
-	}	
 
-	DeleteFile(input+"TransformixRun.bat");
-	DeleteDir(input + "5_Analysis_Output/Temp/Transformed_Raw_Out/");
-	collectGarbage(10, 4);	
-
-	TBendtime = getTime();
-	dif = (TBendtime-TBstarttime)/1000;
-	print("Raw channel transformation processing time: ", (dif/60), " minutes.");
-	print("---------------------------------------------------------------------------------------------------------------------");
+		//Transform images to ABA space
+		TBstarttime = getTime();
+	
+		File.mkdir(input + "5_Analysis_Output/Temp/Transformed_Raw_Out");
+		File.mkdir(TransformedRawDataOut);
+		
+		
+		InvTransPModRawData = CreateCmdLine(input + "5_Analysis_Output/Transform_Parameters/RawDataTransformParameters.txt");
+		
+		open(input + "5_Analysis_Output/Transform_Parameters/OriginPoints/Origin_Output_Points.csv");
+		Table.rename(Table.title, "Results");
+		IndexOrigin=parseInt(getResult("Z", 0));
+		IndexEnd=parseInt(getResult("Z", 1));
+		close("Results");
+		
+		for(j=1; j<ChNum+1; j++) {	
+			print("Transforming raw data for channel "+j+" to atlas space...");
+	
+			if (File.exists(TransformedRawDataOut+"C"+j+"_raw_data_in_atlas_space.tif")) {
+				print("     Projection density heatmap already created. If you wish to rerun, delete : \n     "+TransformedRawDataOut+"C"+j+"_raw_data_in_atlas_space.tif");
+			} else {
+		
+						
+				TransformedRawData = input + "5_Analysis_Output/Temp/Transformed_Raw_Out/result.mhd";
+				RawImageForTrans = CreateCmdLine(RegDir + "C"+j+"_25.tif");
+				TempTransImageOut = CreateCmdLine(input + "5_Analysis_Output/Temp/Transformed_Raw_Out");
+		
+				TransformCmd = Transformix +" -in "+RawImageForTrans+" -tp "+InvTransPModRawData+" -out "+TempTransImageOut;
+				
+				CreateBatFile (TransformCmd, input, "TransformixRun");
+				runCmd = CreateCmdLine(input + "TransformixRun.bat");
+				exec(runCmd);
+				print(" Image transformation complete.");
+				print("   ");
+				
+				run("MHD/MHA...", "open=["+ TransformedRawData+"]");
+				
+				rename("RawData");
+				setMinAndMax(0, 65535);
+				run("16-bit");
+				resetMinAndMax();
+				
+				//if (ProAnRes != 25) {
+				//	makeRectangle((parseInt(IndexOrigin*(1/(ProAnRes/25)))+parseInt(6*(1/(ProAnRes/25)))), 0, (parseInt(IndexEnd*(1/(ProAnRes/25)))-parseInt(IndexOrigin*(1/(ProAnRes/25)))-parseInt(6*(1/(ProAnRes/25)))), parseInt(320*(1/(ProAnRes/25))));
+				//	
+				//} else {
+					//crop out density analysis region - currently using -5 to be conservative, potentially use better origin points
+			 	ResliceSagittalCoronal();
+			 	
+			 	makeRectangle((IndexOrigin+Trim), 0, (IndexEnd-IndexOrigin-Trim), AtlasSizeY);
+	
+			 		 		 		
+				//}
+				run("Clear Outside", "stack");
+				run("Select None");
+	
+				ResliceSagittalCoronal();
+				rename("RawData");
+				
+				//Open template make binary and multipy with raw data to clean up
+				open(AtlasDir + "Template.tif");
+				rename("Template");
+		
+				setMinAndMax(7, 7);
+				run("Apply LUT", "stack");
+				run("8-bit");
+				run("Subtract...", "value=254 stack");
+				imageCalculator("Multiply create stack", "RawData","Template");
+				selectWindow("Result of RawData");
+				if (OutputType == "Sagittal") {
+					ResliceSagittalCoronal();
+				}
+				
+				saveAs("Tiff", TransformedRawDataOut+"C"+j+"_raw_data_in_atlas_space.tif");
+				close("*");
+			}
+				
+		}	
+	
+		DeleteFile(input+"TransformixRun.bat");
+		DeleteDir(input + "5_Analysis_Output/Temp/Transformed_Raw_Out/");
+		collectGarbage(10, 4);	
+	
+		TBendtime = getTime();
+		dif = (TBendtime-TBstarttime)/1000;
+		print("Raw channel transformation processing time: ", (dif/60), " minutes.");
+		print("---------------------------------------------------------------------------------------------------------------------");
+		VisRegCheck = 0;
+	} else {
+			VisRegCheck = 1;
+			print("     Registration process for generating visualizations of raw data and projections in atlas space failed.");
+			print("     Visualizations of projections and raw data in atlas space won't be available but all other analysis is unaffected");
+			print("     To resolve this issue, check \5_Analysis_Output\template_brain_aligned.tif and explore ways to improve registration (e.g. replace damaged sections)");	
+	}
+return VisRegCheck;
 }
 
 function TransformBinaryDataToAtlas(Channel) {
@@ -4752,45 +4797,51 @@ function TransformBinaryDataToAtlas(Channel) {
 		print(" Image transformation complete.");
 		print("   ");
 		
-		run("MHD/MHA...", "open=["+ TransformedBinaryData+"]");
+		if (File.exists(TransformedBinaryData)) {
+			run("MHD/MHA...", "open=["+ TransformedBinaryData+"]");
+			
+			rename("RawData");
 		
-		rename("RawData");
-
-		run("8-bit");
-		resetMinAndMax();
+			run("8-bit");
+			resetMinAndMax();
+			
+		 	ResliceSagittalCoronal();
+		 	
+		 	makeRectangle((IndexOrigin+Trim), 0, (IndexEnd-IndexOrigin-Trim), AtlasSizeY);
+			//print(IndexOrigin, IndexEnd, AtlasSizeY);
+			run("Clear Outside", "stack");
+			run("Select None");
 		
-	 	ResliceSagittalCoronal();
-	 	
-	 	makeRectangle((IndexOrigin+Trim), 0, (IndexEnd-IndexOrigin-Trim), AtlasSizeY);
-		//print(IndexOrigin, IndexEnd, AtlasSizeY);
-		run("Clear Outside", "stack");
-		run("Select None");
-
-		ResliceSagittalCoronal();
-		rename("RawData");
-		
-		//Open template make binary and multipy with raw data to clean up
-		open(AtlasDir + "Template.tif");
-		rename("Template");
-
-		setMinAndMax(7, 7);
-		run("Apply LUT", "stack");
-		run("8-bit");
-		run("Subtract...", "value=254 stack");
-		imageCalculator("Multiply create stack", "RawData","Template");
-		selectWindow("Result of RawData");
-		if (OutputType == "Sagittal") {
 			ResliceSagittalCoronal();
-		}
+			rename("RawData");
+			
+			//Open template make binary and multipy with raw data to clean up
+			open(AtlasDir + "Template.tif");
+			rename("Template");
 		
-		saveAs("Tiff", TransformedProjectionDataOut+"C"+Channel+"_binary_projection_data_in_atlas_space.tif");
-		close("*");
+			setMinAndMax(7, 7);
+			run("Apply LUT", "stack");
+			run("8-bit");
+			run("Subtract...", "value=254 stack");
+			imageCalculator("Multiply create stack", "RawData","Template");
+			selectWindow("Result of RawData");
+			if (OutputType == "Sagittal") {
+				ResliceSagittalCoronal();
+			}
+			
+			saveAs("Tiff", TransformedProjectionDataOut+"C"+Channel+"_binary_projection_data_in_atlas_space.tif");
+			close("*");
+			VisRegCheck = 0;
+		} else {
+			VisRegCheck = 1;
+		}
 	}
 		
 
 	DeleteFile(input+"TransformixRun.bat");
 	DeleteDir(input + "5_Analysis_Output/Temp/Transformed_Binary_Out/");
 	collectGarbage(10, 4);	
+	return VisRegCheck;
 
 }
 
@@ -4902,11 +4953,18 @@ function PerformReverseTransformationForProjections() {
 			
 			close("RawDataTransformParameters.txt");
 			DeleteDir(input + "5_Analysis_Output/Temp/InvOut/");
-			print("     Transform parameters created.");
-		}	
-	
+			
+			if (File.exists(input + "5_Analysis_Output/Transform_Parameters/ProjectionTransformParameters.txt") {
+				print("     Transform parameters created.");
+				VisRegCheck = 0;
+			} else {
+				VisRegCheck = 1;
+				print("     Registration process for generating visualizations of raw data and projections in atlas space failed.");
+				print("     Visualizations of projections and raw data in atlas space won't be available but all other analysis is unaffected");
+				print("     To resolve this issue, check \5_Analysis_Output\template_brain_aligned.tif and explore ways to improve registration (e.g. replace damaged sections)");
 
-	
+			}
+	
 	}		
 	
 	ProTendtime = getTime();
@@ -4914,6 +4972,8 @@ function PerformReverseTransformationForProjections() {
 	print("Projection transformation processing time: ", (dif/60), " minutes.");
 	print("---------------------------------------------------------------------------------------------------------------------");
 
+	}
+return VisRegCheck;
 }
 
 function TransformAnnotationDataset() {
