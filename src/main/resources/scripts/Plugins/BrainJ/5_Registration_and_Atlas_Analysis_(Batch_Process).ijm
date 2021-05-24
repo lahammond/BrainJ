@@ -573,7 +573,8 @@ if (AtlasAnalysisON == true) {
 		//Count number of registered slices
 		RegSectionsCount = getFileList(input+ "/3_Registered_Sections/1/");	
 		RegSectionsCount = RegSectionsCount.length;
-				
+		
+		
 		if (AlignParamCheck < 3) {
 			// import transformed template
 			run("MHD/MHA...", "open=["+ input + "5_Analysis_Output/Temp/Template_aligned/result.1.mhd]");
@@ -842,7 +843,8 @@ if (CellAnalysisON == true && CellDetMethod != "No Cell Analysis" && AlignParamC
 	} else {
 		for (Ch_i = 0; Ch_i < 3; Ch_i++) {
 			if (CellChans[Ch_i] > 0) {
-				print(" Resampling cell points "+CellChans[Ch_i]+" to atlas...");	
+				print(" Resampling cell points "+CellChans[Ch_i]+" to atlas...");
+	
 				run("Input/Output...", "jpeg=100 gif=-1 file=.csv use use_file");
 				OpenAsHiddenResults(CellPointsDir + "Cell_Points_Ch"+CellChans[Ch_i]+".csv");
 				TotalResults = nResults;
@@ -1145,7 +1147,8 @@ if (CreateColorDensityImagesON == true && ProjDetMethod != "No Projection Analys
 				//after running test that it can perform if files missing for registered direcotry
 				VisRegCheck = TransformBinaryDataToAtlas(ProChans[Ch_i]);
 				if (VisRegCheck == 0) {	
-					createColorProjections(ProChans[Ch_i]);				
+					createColorProjections(ProChans[Ch_i]);
+				
 				 	OverlayColorProjectionsOnTemplate(TransformedProjectionDataOut+"C"+ProChans[Ch_i]+"_Atlas_Colored_Projections.tif", ProChans[Ch_i], TransformedProjectionDataOut);
 				}
 				}
@@ -1159,7 +1162,7 @@ if (CreateColorDensityImagesON == true && ProjDetMethod != "No Projection Analys
 		print("Atlas colored projection density images could not be created. Check registration quality.");	
 		print("---------------------------------------------------------------------------------------------------------------------");	
 
-	}
+
 }	
 
 /////////////////// STEP 6: TRANSFORM RAW DATA TO ABA /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1301,6 +1304,7 @@ saveAs("txt", input+"/Atlas_Analysis_Log_" + year + "-" + (month+1) + "-" + dayO
 }
 }
 }
+
 wait(500);
 close("Results");
 
@@ -1781,7 +1785,8 @@ function CreateOriginPoints() {
 	print("[ResampledPoints]", "point\n");
 	//Weird behaviour with ImageJ 1.53c - sometimes rows 3 sometimes 2
 	//print("[ResampledPoints]", rows.length + "\n");
-	print("[ResampledPoints]", 2 + "\n");
+	
+print("[ResampledPoints]", 2 + "\n");
 	if (rows.length == 3) {
 		for(i=1; i<rows.length; i++){ 
 			print("[ResampledPoints]", rows[i] + "\n");
@@ -1945,13 +1950,16 @@ function CreateProbabilityMap(CellChan) {
 				run("Convert to Mask", "method=Default background=Dark black");
 				print(EnOut);
 				print(MaskOut);
-				run("Image Sequence... ", "format=PNG save=["+MaskOut+"Section0000.png]");				
-			}			
+				run("Image Sequence... ", "format=PNG save=["+MaskOut+"Section0000.png]");
+				
+			}
+			
 			close();
 			collectGarbage(Dslices, 4);
 			print("   Complete.");
 		}
-			
+	
+		
 		EnSections = getFileList(EnOut);
 		EnSections = Array.sort(EnSections);
 
@@ -1959,7 +1967,8 @@ function CreateProbabilityMap(CellChan) {
 		MaskSections = Array.sort(MaskSections);
 		
 		print("Performing Ilastik pixel classification...");
-				
+		
+		
 		for(i=0; i<EnSections.length; i++) {	
 			EnSection = EnSections[i];
 			if (MaskOut != 0) {
@@ -2002,7 +2011,8 @@ function CreateProbabilityMap(CellChan) {
 			//if(validation = true) {
 					//open probability cell channel - expects cells REd Processes Green Background Blue
 				//merge with enhanced
-				//save in validation folder	
+				//save in validation folder
+	
 		}
 	
 	}	
@@ -2011,7 +2021,8 @@ function CreateProbabilityMap(CellChan) {
 	DeleteFile(input+"Ilastikrun.bat");
 
 	//Option to Delete Enhanced Channel?
-							
+				
+			
 	//Preprocessing of Slices
 
 	//print("\\Clear");
@@ -2442,7 +2453,8 @@ function detectcellsfromprob(CellChan, MinInt, cellsize) {
 
 		File.mkdir(input + "4_Processed_Sections/Object_Detection_Validation/"+CellChan);
 		ValOut = input + "4_Processed_Sections/Object_Detection_Validation/"+CellChan+"/";
-			
+	
+		
 		masks = getFileList(ProbDir);
 		masks = Array.sort( masks );
 	
@@ -2525,7 +2537,8 @@ function detectcellsfromprob(CellChan, MinInt, cellsize) {
 
 		ChNum = CountFolders(input+ "/3_Registered_Sections/");
 
-		for(chl=1; chl<=ChNum; chl++) {			
+		for(chl=1; chl<=ChNum; chl++) {
+			
 			if (chl != MeasureAlign) {
 	 			//open the stack
 	 			RawSections = getFileList(RegDir + chl);
@@ -2588,7 +2601,8 @@ function detectcellsfromprob(CellChan, MinInt, cellsize) {
 		
 		////// Create a annotated table ////
 		print("     Saving cell locations and measured intensities.");
-
+
+
 		// Set a filename:
 		CellFileOut = CellIntensityOut + "Cell_Points_with_intensities_Ch"+CellChan+".csv";
 		
@@ -2607,7 +2621,8 @@ function detectcellsfromprob(CellChan, MinInt, cellsize) {
 		for(j=0; j<CountROI; j++){ 
 			print(WriteOut, XCoordinate[j]+","+YCoordinate[j]+","+ZCoordinate[j]+","+MeasMeanInt1[j]+","+MeasMeanInt2[j]+","+MeasMeanInt3[j]+","+MeasMeanInt4[j]);
 		} 
-	
+
+	
 		// 5) Close file
 		File.close(WriteOut);
 			
@@ -2963,7 +2978,8 @@ function enhancedcoronalto3Dsagittalbinary (inputdir, outputdir, filename, outpu
 			
 		//run("Scale...", "x="+scaledown+" y="+scaledown+" z="+scaleZ+" interpolation=Bilinear average process create");
 		run("Scale...", "x="+scaledown+" y="+scaledown+" z="+scaleZ+" interpolation=None process create");
-	
+
+	
 		SCALE = getImageID();
 		
 		selectImage(Original);
@@ -3030,14 +3046,16 @@ function coronalto3Dsagittal (inputdir, outputdir, filename, outputres, ZCut) {
 	}
 	
 }
-
+
+
 function closewindow(windowname) {
 	if (isOpen(windowname)) { 
       		 selectWindow(windowname); 
        		run("Close"); 
   		} 
 }
-
+
+
 function AnnotatePoints (PointsIn, AtlasAnnotationImg, AtlasAnnotationCSV, MeasuredIntCSV, AnnotatedSummary, AnnotatedOut) {
 	run("Input/Output...", "jpeg=100 gif=-1 file=.csv use use_file save_column");
 	run("Set Measurements...", "mean redirect=None decimal=3");
@@ -3067,7 +3085,8 @@ function AnnotatePoints (PointsIn, AtlasAnnotationImg, AtlasAnnotationCSV, Measu
 			Uncertainty = ZCut/AtlasResZ;
 			Z=Z-Uncertainty/2;
 			Randomizer = Uncertainty * random;
-			Z = Z + Randomizer;		
+			Z = Z + Randomizer;
+		
 		}
 		if (Z < 1) {
 			Z = 1;
@@ -3231,7 +3250,8 @@ function createColorProjections(Channel) {
 	IndexOrigin=parseInt(getResult("Z", 0));
 	IndexEnd=parseInt(getResult("Z", 1));
 	close("Results");
-	if (File.exists(TransformedProjectionDataOut + "C"+Channel+"_binary_projection_data_in_atlas_space.tif")) {
+
+	if (File.exists(TransformedProjectionDataOut + "C"+Channel+"_binary_projection_data_in_atlas_space.tif")) {
  
 		open(TransformedProjectionDataOut + "C"+Channel+"_binary_projection_data_in_atlas_space.tif");
 	
@@ -3342,7 +3362,8 @@ function OverlayColorProjectionsOnTemplate(Projections, Channel, OutputDir) {
 
 
 }
- 	
+ 	
+
 function MeasureIntensitiesLRHemisphereFullRes(Channel) {
 	// Previously: (OriginPoints, Channel, TransformedInputImage, OutputDir)
 	// (input + "5_Analysis_Output/Transform_Parameters/OriginPoints/Origin_Output_Points.csv", j, TransformedRawDataOut+"/"+"C"+j+"_raw_data_in_atlas_space.tif", input+"/5_Analysis_Output/Region_Mean_Intensity_Measurements")
@@ -3580,8 +3601,10 @@ function MeasureIntensitiesLRHemisphereFullRes(Channel) {
 			}
 			if (isNaN(MeanIntensityRight) == 1) {
 				MeanIntensityRight = 0;
-			}
-			print(f,VolumesRight[i]+"\t"+VolumesLeft[i]+"\t"+ExpIntensityRight[i]+"\t"+ExpIntensityLeft[i]+"\t"+MeanIntensityRight+"\t"+MeanIntensityLeft+"\t"+RegionIDs[i]+","+RegionAcr[i]+",\""+RegionNames[i]+"\","+Graph_Order[i]+","+ParentIDs[i]+",\""+ParentNames[i]+"\",\""+Graph_Path[i]+"\"");
+			}
+
+			print(f,VolumesRight[i]+"\t"+VolumesLeft[i]+"\t"+ExpIntensityRight[i]+"\t"+ExpIntensityLeft[i]+"\t"+MeanIntensityRight+"\t"+MeanIntensityLeft+"\t"+RegionIDs[i]+","+RegionAcr[i]+",\""+RegionNames[i]+"\","+Graph_Order[i]+","+ParentIDs[i]+",\""+ParentNames[i]+"\",\""+Graph_Path[i]+"\""
+);
 		} 
 		close("Results");
 		selectWindow(title1);
@@ -3699,7 +3722,8 @@ function OverlayColorCellsOnTemplate(Cells, Channel, OutputDir) {
 	
 
 	run("Merge Channels...", "c1=Red c2=Green c3=Blue create");
-	run("Properties...", "pixel_width=25.0000 pixel_height=25.0000 voxel_depth=25.0000");
+
+	run("Properties...", "pixel_width=25.0000 pixel_height=25.0000 voxel_depth=25.0000");
 	saveAs("Tiff", OutputDir + "/C"+Channel+"_Atlas_Colored_Cells_Template_Overlay.tif");
 	
 	if (AtlasType != "Spinal Cord") {
@@ -4954,7 +4978,7 @@ function PerformReverseTransformationForProjections() {
 			close("RawDataTransformParameters.txt");
 			DeleteDir(input + "5_Analysis_Output/Temp/InvOut/");
 			
-			if (File.exists(input + "5_Analysis_Output/Transform_Parameters/ProjectionTransformParameters.txt") {
+			if (File.exists(input + "5_Analysis_Output/Transform_Parameters/ProjectionTransformParameters.txt")) {
 				print("     Transform parameters created.");
 				VisRegCheck = 0;
 			} else {
@@ -4964,7 +4988,8 @@ function PerformReverseTransformationForProjections() {
 				print("     To resolve this issue, check \5_Analysis_Output\template_brain_aligned.tif and explore ways to improve registration (e.g. replace damaged sections)");
 
 			}
-	
+	
+
 	}		
 	
 	ProTendtime = getTime();
@@ -5946,7 +5971,8 @@ function SpinalCordCreateRelativeDensityTable (Table1, Table2, TableName) {
 	Table.rename(Table.title, "T1");
 	setLocation(screenWidth, screenHeight);
 	OpenAsHiddenResults(Table2);
-	
+
+	
 	RegionIDs = newArray(nResults);
 	for(i=0; i<NumIDs; i++) {
 		RegionIDs[i] = getResult("Region_ID", i);
@@ -6145,7 +6171,8 @@ function CreateCellDensityTableLRHemisphereFullResSpinalCord(Channel) {
 	// creates a volume and cell density table using a transformed annotation image
 	// Cell density expressed in mm3
 	// Create region volume if necessary using Zcut thickness and lateral res provided (10um for SC, 25um for mousebrain)
-	
+
+	
 	SCColTitles = "C1_R,C1_L,C2_R,C2_L,C3_R,C3_L,C4_R,C4_L,C5_R,C5_L,C6_R,C6_L,C7_R,C7_L,C8_R,C8_L,T1_R,T1_L,T2_R,T2_L,T3_R,T3_L,T4_R,T4_L,T5_R,T5_L,T6_R,T6_L,T7_R,T7_L,T8_R,T8_L,T9_R,T9_L,T10_R,T10_L,T11_R,T11_L,T12_R,T12_L,T13_R,T13_L,L1_R,L1_L,L2_R,L2_L,L3_R,L3_L,L4_R,L4_L,L5_R,L5_L,L6_R,L6_L,S1_R,S1_L,S2_R,S2_L,S3_R,S3_L,S4_R,S4_L,Co1_R,Co1_L,Co2_R,Co2_L,Co3_R,Co3_L,Region_R,Region_L,Region_Total,Region_ID,Region_Acronym,Region_Name,Parent_ID,Parent_Acronym\n";
 	SCColTitlesList = split(SCColTitles, ",");
 	
@@ -6289,7 +6316,8 @@ function SCMeasureRegionVolumes (SCTableOut) {
 				L_Total = L_Total + volume;
 				Region_Row = Region_Row + volume + ",";
 				volume = 0;
-			}		
+			}
+		
 			
 			Region_Row = Region_Row + R_Total + "," + L_Total + "," + (R_Total + L_Total) + "," + RegionIDs[j] + "," + RegionAcronyms[j]+","+RegionNames[j]+","+ParentIDs[j]+","+ParentAcronyms[j]+","+ChildAcronyms[j]+","+ChildIDs[j]+"\n";					
 
