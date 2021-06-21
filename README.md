@@ -1,7 +1,7 @@
 # BrainJ
 An accessible tool for automated brain reconstruction, mesoscale mapping, and cell analysis.
 
-Please read the [BrainJ Guide.pdf](https://github.com/lahammond/BrainJ/blob/master/BrainJ%20Guide%209_3.pdf) for step-by-step instructions and troubleshooting.
+**Please read the [BrainJ Guide.pdf](https://github.com/lahammond/BrainJ/blob/master/BrainJ%20Guide%209_3.pdf) for step-by-step instructions and troubleshooting.**
 
 Now supporting the enhanced and unified mouse brain atlas - https://www.nature.com/articles/s41467-019-13057-w
 
