@@ -1,4 +1,5 @@
-# BrainJ: An accessible tool for automated brain reconstruction, mesoscale mapping, and cell analysis.
+# BrainJ
+An accessible tool for automated brain reconstruction, mesoscale mapping, and cell analysis.
 
 **Please read the [BrainJ Guide.pdf](https://github.com/lahammond/BrainJ/blob/master/BrainJ%20Guide%209_3.pdf) for step-by-step instructions and troubleshooting.**
 
