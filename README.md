@@ -28,6 +28,12 @@ Reconstructing serial tissue sections into whole brains and analyzing them withi
 * Store the atlas files folder somewhere on your computer. The pipeline will use the files
 in this folder to perform analysis and generate visualizations
 
+## Citing
+
+If you use BrainJ please cite our publication:
+
+[An amygdala circuit mediates experience-dependent momentary exploratory arrests.](https://www.cell.com/cell/fulltext/S0092-8674(20)31164-8) Botta et al. Cell 2020
+
 ## Usage
 
 * __See the [BrainJ Guide.pdf](https://github.com/lahammond/BrainJ/blob/master/BrainJ%20Guide%209_3.pdf) for step-by-step instructions__
