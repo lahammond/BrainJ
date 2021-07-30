@@ -24,8 +24,8 @@ run("Colors...", "foreground=white background=black selection=yellow");
 run("Clear Results"); 
 run("Close All");
 
-BrainJVer ="BrainJ 1.0.0";
-ReleaseDate= "May 20, 2021";
+BrainJVer ="BrainJ 1.0.1";
+ReleaseDate= "July 30, 2021";
 
 #@ File[] listOfPaths(label="Select experiment/brain folders:", style="both")
 #@ File(label="Select template/annotation direcotry to be used (e.g. ABA CCF 2017):", style="directory") AtlasDir
@@ -3322,8 +3322,10 @@ function OverlayColorProjectionsOnTemplate(Projections, Channel, OutputDir) {
 	//import projections
 	open(Projections);	
 	rename("Projections");
-	run("Gaussian Blur 3D...", "x=1 y=1 z=1");
-	run("Enhance Contrast", "saturated=0.35");
+	//setMinAndMax(0, 185);
+	run("Apply LUT", "stack");
+	//run("Gaussian Blur 3D...", "x=1 y=1 z=1");
+	//run("Enhance Contrast", "saturated=0.35");
 	run("Split Channels");
 
 	//Do image calculations
