@@ -7,8 +7,6 @@ Now supporting the enhanced and unified mouse brain atlas - https://www.nature.c
 
 If you are reconstructing and analyzing spinal cords - see our new tool [SpinalJ](https://github.com/felixfiederling/SpinalJ) for the mouse spinal cord.**
 
-<img src="./Images/BrainJ4.jpg" width="800">
-
 <img src="./Images/BrainJ1.jpg" width="800">
 
 ## About
