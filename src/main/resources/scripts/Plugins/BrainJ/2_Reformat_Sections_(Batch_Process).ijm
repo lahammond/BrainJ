@@ -30,8 +30,8 @@ run("Colors...", "foreground=white background=black selection=yellow");
 run("Clear Results"); 
 run("Close All");
 
-BrainJVer ="BrainJ 1.0.1";
-ReleaseDate= "July 30, 2021";
+BrainJVer ="BrainJ 1.0.2";
+ReleaseDate= "September 24, 2021";
 
 
 // Select input directories
@@ -194,6 +194,21 @@ for (FolderNum=0; FolderNum<listOfPaths.length; FolderNum++) {
 			print("");
 			print("Reformatting sections complete.");
 			print("- - -");
+			//add in some errprint("");	
+			if (SType == "Mouse Brain: Coronal Sections") {
+				if (CanvasWidth > 18000* InputRes || CanvasHeight > 18000* InputRes) {
+					print("*Some image dimensions larger than expected - check image dimensions of specific files below.");
+					print("Remove any double sections or unexpected images that could cause errors later.");
+				} else if (CanvasWidth < 5000* InputRes || CanvasHeight < 5000* InputRes) {
+					print("*Some image dimensions smaller than expected - check image dimensions of all files below.");
+					print("Remove any images that might not contain brain section images and could cause errors later.");
+				} else {
+					print("All image dimensions within expected range. No issues expected but image dimensions");
+					print("have been listed below in case they are required for troubleshooting:");
+				}
+			}
+			print("");
+			print(CanvasDim[3]);
 	
 			selectWindow("Log");
 			// time stamp log to prevent overwriting.
@@ -1051,14 +1066,20 @@ function LargestCanvas(input) {
 	files = getFileList(input);	
 	files = ImageFilesOnlyArray(files);		
 	files = Array.sort( files );
+	CanvasSizes = "";
 	for(i=0; i<files.length; i++) {				
 			
 		run("Bio-Formats Macro Extensions");
 		Ext.setId(input + files[i]);
-		Ext.getSizeX(CanvasSizeX)
-		Ext.getSizeY(CanvasSizeY)
-		Ext.getSizeC(TotalChannels)
-		
+		Ext.getSizeX(CanvasSizeX);
+		Ext.getSizeY(CanvasSizeY);
+		if (i == 0) {
+			Ext.getSizeC(TotalChannels0);
+		}
+		Ext.getSizeC(TotalChannels1);
+		if (TotalChannels0 != TotalChannels1) {
+			exit("Not all images contain the same number of channels/nCheck folder and remove any non section images (e.g. single channel prescan/slide overview images)");
+		}
 		Ext.close();
 		
 		
@@ -1112,14 +1133,16 @@ function LargestCanvas(input) {
 		if (CanvasSizeY > FinalCanvasSizeY) {
 			FinalCanvasSizeY = CanvasSizeY;
 		}
-		print("  File = " +files[i]+ "   Width = " + CanvasSizeX + "   Height = " + CanvasSizeY);
+		
+		CanvasSizes = CanvasSizes +"" +files[i]+ "  Width = " + CanvasSizeX + "  Height = " + CanvasSizeY +"\n";
 	}
 	
 		
-	CanvasDim = newArray(3);
+	CanvasDim = newArray(4);
 	CanvasDim[0] = FinalCanvasSizeX;
 	CanvasDim[1] = FinalCanvasSizeY;
-	CanvasDim[2] = TotalChannels;
+	CanvasDim[2] = TotalChannels1;
+	CanvasDim[3] = CanvasSizes;
 
 	ok = File.delete(input + "temp_metadata.txt");
 

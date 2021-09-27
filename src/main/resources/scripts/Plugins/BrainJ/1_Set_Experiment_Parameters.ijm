@@ -25,7 +25,7 @@
 #@ String(label="Counterstain channel (e.g. DAPI or NeuroTrace):", choices={"1", "2", "3", "4", "5"}, style="radioButtonHorizontal", value = "2", description="Select the channel number containing DAPI or Autofluorescence, to be used for registration.") AlignCh
 #@ Integer(label="Background intensity of counterstain channel:", value = 200, style="spinner", description="This value will be subtracted to allow better alignment") BGround
 #@ boolean(label="Perform automatic tissue detection:", description="Automatic detection and segmentation of tissue sections.") AutoSeg
-#@ String(label="Spinal cord range (start segment, end segment):", style="text field", value = "C1,L5", description="Providing a start and end segment for your SC dataset will ensure better registration.") SCSegRange
+//#@ String(label="Spinal cord range (start segment, end segment):", style="text field", value = "C1,L5", description="Providing a start and end segment for your SC dataset will ensure better registration.") SCSegRange
 
 //#@String(visibility="MESSAGE", value="------------------------------------------------------------------Isolated Region/s Settings------------------------------------------------------------------") out2
 //#@String(label="ABA region/s to be isolated (e.g. 96,101):", value = "", description="Provide comma separated ABA numbers to define region/s to be aligned and analyzed") RegionNumbers
@@ -59,7 +59,7 @@ print(f,"Analysis Type:\t"+AnalysisType); //12
 
 print(f,"Input Resolution:\t"+InputRes); //13
 print(f,"Automatic Segmentation:\t"+AutoSeg); //14
-print(f,"SC Segment Range:\t"+SCSegRange); //15
+print(f,"SC Segment Range:\tC1,L5"); //15
 
 	
 selectWindow(title1);	

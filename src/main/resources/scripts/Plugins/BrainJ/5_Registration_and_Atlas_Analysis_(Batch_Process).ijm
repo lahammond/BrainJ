@@ -24,8 +24,9 @@ run("Colors...", "foreground=white background=black selection=yellow");
 run("Clear Results"); 
 run("Close All");
 
-BrainJVer ="BrainJ 1.0.1";
-ReleaseDate= "July 30, 2021";
+BrainJVer ="BrainJ 1.0.2";
+ReleaseDate= "September 24, 2021";
+
 
 #@ File[] listOfPaths(label="Select experiment/brain folders:", style="both")
 #@ File(label="Select template/annotation direcotry to be used (e.g. ABA CCF 2017):", style="directory") AtlasDir
@@ -1268,6 +1269,9 @@ print("Atlas used for analysis: " + AtlasName);
 print("---------------------------------------------------------------------------------------------------------------------");
 print("- - - " +BrainJVer+ " - - -");
 print("---------------------------------------------------------------------------------------------------------------------");
+print("");
+print("Bregma coordinates have been provided by comparing multiple landmarks to determine the following linear transformations:");
+print("   Bregma_AP = (ZPosition*25-5350)*-1   Bregma_DV = (YPosition*25-470)*-1   Bregma_ML = XPosition*25-5700");
 
 if (AlignParamCheck == 3) {
 	print("***Warning: Alignment to template brain failed all three attempts.");
@@ -3161,8 +3165,8 @@ function AnnotatePoints (PointsIn, AtlasAnnotationImg, AtlasAnnotationCSV, Measu
 	// 2) Open file to write into
 	WriteOut = File.open(CellFileOut);
 	// 3) Print headings
-		//print(WriteOut, "X,Y,Z,Z_Dither,Bregma_AP,Bregma_DV,Bregma_ML,Mean_Int_Ch1,Mean_Int_Ch2,Mean_Int_Ch3,Mean_Int_Ch4,Hemisphere,Region_ID\n");
-	print(WriteOut, "X,Y,Z,Z_Dither,Mean_Int_Ch1,Mean_Int_Ch2,Mean_Int_Ch3,Mean_Int_Ch4,Hemisphere,ID\n");
+	print(WriteOut, "X,Y,Z,Z_Dither,Bregma_AP,Bregma_DV,Bregma_ML,Mean_Int_Ch1,Mean_Int_Ch2,Mean_Int_Ch3,Mean_Int_Ch4,Hemisphere,ID,Acronym\n");
+	//print(WriteOut, "X,Y,Z,Z_Dither,Mean_Int_Ch1,Mean_Int_Ch2,Mean_Int_Ch3,Mean_Int_Ch4,Hemisphere,ID\n");
 
 	
 	for(i=0; i<ChCount; i++){ 
@@ -3173,12 +3177,20 @@ function AnnotatePoints (PointsIn, AtlasAnnotationImg, AtlasAnnotationCSV, Measu
 		} else {
 			HemisphereArray[i] = "Left";
 		}
-		//BregmaAP = ((ZPos[i]*25)-5350)*-1;
-		//BregmaDV = ((YPos[i]*25)-470)*-1;
-		//BregmaML = XPos[i]*25-5700;
+		BregmaAP = ((ZPos[i]*25)-5350)*-1;
+		BregmaDV = ((YPos[i]*25)-470)*-1;
+		BregmaML = XPos[i]*25-5700;
+
+		// Update Region Intensity to Reflect OutputIDs
+		location = LocateID(RegionIDs, MeanMeasurements[i]);
+		trueID = OutputRegionIDs[location];
+		trueAcr = RegionAcr[location]; 
+		// Look up Acronym based on OutputID
+		
+		
 		//print(WriteOut, XPos[i]+","+YPos[i]+","+ZPos[i]+","+Z_Dither[i]+","+BregmaAP+","+BregmaDV+","+BregmaML+","+MeanIntCh1[i]+","+MeanIntCh2[i]+","+MeanIntCh3[i]+","+MeanIntCh4[i]+","+HemisphereArray[i]+","+MeanMeasurements[i]);
 		
-		print(WriteOut, XPos[i]+","+YPos[i]+","+ZPos[i]+","+Z_Dither[i]+","+MeanIntCh1[i]+","+MeanIntCh2[i]+","+MeanIntCh3[i]+","+MeanIntCh4[i]+","+HemisphereArray[i]+","+MeanMeasurements[i]);
+		print(WriteOut, XPos[i]+","+YPos[i]+","+ZPos[i]+","+Z_Dither[i]+","+BregmaAP+","+BregmaDV+","+BregmaML+","+MeanIntCh1[i]+","+MeanIntCh2[i]+","+MeanIntCh3[i]+","+MeanIntCh4[i]+","+HemisphereArray[i]+","+trueID+","+trueAcr);
 	} 
 
 	// 5) Close file
