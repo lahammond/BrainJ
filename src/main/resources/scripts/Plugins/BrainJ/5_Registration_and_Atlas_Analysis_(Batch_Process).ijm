@@ -1955,7 +1955,8 @@ function CreateProbabilityMap(CellChan) {
 			if (BGSZ > 0) {
 				run("Subtract Background...", "rolling="+ BGSZ + " stack");
 			}
-			run("Image Sequence... ", "format=TIFF save=["+EnOut+"Section0000.tif]");
+			rename("Section");
+			run("Image Sequence... ", "format=TIFF save=["+EnOut+"]");
 
 			if (MaskOut != 0) {
 				setThreshold(MaskThresh, 65535);
@@ -1963,7 +1964,8 @@ function CreateProbabilityMap(CellChan) {
 				run("Convert to Mask", "method=Default background=Dark black");
 				print(EnOut);
 				print(MaskOut);
-				run("Image Sequence... ", "format=PNG save=["+MaskOut+"Section0000.png]");
+				rename("Section");
+				run("Image Sequence... ", "format=PNG save=["+MaskOut+"]");
 				
 			}
 			
@@ -2103,7 +2105,8 @@ function CreateProbabilityMapBatch(CellChan) {
 			if (BGSZ > 0) {
 				run("Subtract Background...", "rolling="+ BGSZ + " stack");
 			}
-			run("Image Sequence... ", "format=TIFF save=["+EnOut+"Section0000.tif]");
+			rename("Section");
+			run("Image Sequence... ", "format=TIFF save=["+EnOut+"]");
 
 			if (MaskOut != 0) {
 				setThreshold(MaskThresh, 65535);
@@ -2111,7 +2114,8 @@ function CreateProbabilityMapBatch(CellChan) {
 				run("Convert to Mask", "method=Default background=Dark black");
 				print(EnOut);
 				print(MaskOut);
-				run("Image Sequence... ", "format=PNG save=["+MaskOut+"Section0000.png]");
+				rename("Section");
+				run("Image Sequence... ", "format=PNG save=["+MaskOut+"]");
 				
 			}
 			
@@ -2232,7 +2236,8 @@ function BGSubChannel(CellChan) {
 		if (BGSZ > 0){
 			run("Subtract Background...", "rolling="+ BGSZ + " stack");
 		}
-		run("Image Sequence... ", "format=TIFF save=["+EnOut+"Section0000.tif]");
+		rename("Section");
+		run("Image Sequence... ", "format=TIFF save=["+EnOut+"]");
 	}
 	//close();
 	collectGarbage(Dslices, 4);
@@ -2280,7 +2285,8 @@ function EnhanceAndFindMaxima(CellChan, MaximaInt) {
 			if (BGSZ > 0){
 				run("Subtract Background...", "rolling="+ BGSZ + " stack");
 			}
-			run("Image Sequence... ", "format=TIFF save=["+EnOut+"Section0000.tif]");
+			rename("Section");
+			run("Image Sequence... ", "format=TIFF save=["+EnOut+"]");
 		}
 		
 		collectGarbage(Dslices, 4);
