@@ -18,7 +18,7 @@
 // 5/06/2018 -- Merging of all tools no longer requies modified multistackreg
 
 // Initialization
-requires("1.53c");
+requires("1.53f");
 run("Options...", "iterations=3 count=1 black edm=Overwrite");
 run("Colors...", "foreground=white background=black selection=yellow");
 run("Clear Results"); 
@@ -1270,8 +1270,7 @@ print("-------------------------------------------------------------------------
 print("- - - " +BrainJVer+ " - - -");
 print("---------------------------------------------------------------------------------------------------------------------");
 print("");
-print("Bregma coordinates have been provided by comparing multiple landmarks to determine the following linear transformations:");
-print("   Bregma_AP = (ZPosition*25-5350)*-1   Bregma_DV = (YPosition*25-470)*-1   Bregma_ML = XPosition*25-5700");
+
 
 if (AlignParamCheck == 3) {
 	print("***Warning: Alignment to template brain failed all three attempts.");
@@ -1299,6 +1298,13 @@ if (CellPlotCheck > 0) {
 	print("   If you are seeing this message check the quality of the registration by inspecting the Template_Brain_Aligned.tif image.");
 	print("");
 }
+
+if (CellAnalysisON == true) {
+	print("");
+	print("Bregma coordinates have been provided by comparing multiple landmarks to determine the following linear transformations:");
+	print("   Bregma_AP = (ZPosition*25-5350)*-1   Bregma_DV = (YPosition*25-470)*-1   Bregma_ML = XPosition*25-5700");
+}
+
 selectWindow("Log");
 // time stamp log to prevent overwriting.
 getDateAndTime(year, month, dayOfWeek, dayOfMonth, hour, minute, second, msec);
@@ -1477,7 +1483,7 @@ function RegisterSections() {
 	if (FullResDAPI == 0 && ChNum > 1) {
 		File.mkdir(RegDir+AlignCh);
 		rename("Ch");
-		run("Image Sequence... ", "format=TIFF save=["+input+"/3_Registered_Sections/"+AlignCh+"/0000.tif]");
+		run("Image Sequence... ", "format=TIFF save=["+input+"/3_Registered_Sections/"+AlignCh+"/]");
 		rename("DAPI");			
 	}
 	
@@ -1732,7 +1738,9 @@ function RegisterSections() {
 			//saveAs("Tiff", input+"/3_Registered_Slices/Ch"+j+"_registered.tif");
 			
 			File.mkdir(RegDir+j);
-			run("Image Sequence... ", "format=TIFF save=["+input+"/3_Registered_Sections/"+j+"/0000.tif]");
+			run("Image Sequence... ", "format=TIFF save=["+input+"/3_Registered_Sections/"+j+"/]");
+			//run("Image Sequence... ", "select=C:/Users/Luke_H/Desktop/3_Registered_Sections/1/ dir=C:/Users/Luke_H/Desktop/3_Registered_Sections/1/ format=TIFF");
+			
 			close();
 			
 			collectGarbage(Dslices, 4);
