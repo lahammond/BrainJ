@@ -1160,9 +1160,10 @@ if (CreateColorDensityImagesON == true && ProjDetMethod != "No Projection Analys
 		print("Atlas colored projection density image creation: ", (dif/60), " minutes.");	
 		print("---------------------------------------------------------------------------------------------------------------------");	
 	} else {
+		if (CreateColorDensityImagesON == true) {
 		print("Atlas colored projection density images could not be created. Check registration quality.");	
 		print("---------------------------------------------------------------------------------------------------------------------");	
-
+		}
 
 }	
 
