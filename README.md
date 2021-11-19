@@ -3,9 +3,9 @@ An accessible tool for automated brain reconstruction, mesoscale mapping, and ce
 
 **Please read the [BrainJ Guide.pdf](https://github.com/lahammond/BrainJ/blob/master/BrainJ%20Guide%209_3.pdf) for step-by-step instructions and troubleshooting.**
 
-Now supporting the enhanced and unified mouse brain atlas - https://www.nature.com/articles/s41467-019-13057-w
+A recorded workshop on using BrainJ for quantitive analysis of cells and projections, as well as analysis of probe and GRIN lens placement, is now [available on YouTube](https://www.youtube.com/embed/R22U9LMyGdA).
 
-If you are reconstructing and analyzing spinal cords - see our new tool [SpinalJ](https://github.com/felixfiederling/SpinalJ) for the mouse spinal cord.**
+We also support the [enhanced and unified mouse brain atlas](https://www.nature.com/articles/s41467-019-13057-w).
 
 <img src="./Images/BrainJ1.jpg" width="800">
 
@@ -42,6 +42,8 @@ If you use BrainJ please cite our publication:
 * Badly damaged tissue may prevent registration and alignment to atlas.
 
 ## Similar Tools
+
+If you are reconstructing and analyzing spinal cords - see our new tool [SpinalJ](https://github.com/felixfiederling/SpinalJ) for the mouse spinal cord.**
 
 For tissue sections:
 * [TissueMetrics](https://www.tissuemetrics.com/about)
