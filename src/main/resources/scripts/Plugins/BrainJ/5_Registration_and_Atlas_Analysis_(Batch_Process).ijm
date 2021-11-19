@@ -1,4 +1,4 @@
-// 3D Registration Cell Detection and Atlas Registration combined
+// 3D Registration, Cell Detection and Atlas Registration
 
 // Author: 	Luke Hammond
 // Cellular Imaging | Zuckerman Institute, Columbia University
@@ -10,13 +10,6 @@
 // 		MulitstackReg
 //		Attentuation Correction (can run without)
 
-// 2/7/2017: V2 Updated work with new TIF exports from Reformat Series 
-// 2/7/2017: V3 Updated to use modified Multistackreg, for downscale of 10 and cropping to save time
-// 2/8/2017: v4 updated to export stacks to improve memory handling for registering large datasets
-// 2/12/2017 v5 Additional memory management to ensure only 1 channel in RAM
-// 4/24/2018:V6 updated to allow batch processing
-// 5/06/2018 -- Merging of all tools no longer requies modified multistackreg
-
 // Initialization
 requires("1.53f");
 run("Options...", "iterations=3 count=1 black edm=Overwrite");
@@ -24,8 +17,8 @@ run("Colors...", "foreground=white background=black selection=yellow");
 run("Clear Results"); 
 run("Close All");
 
-BrainJVer ="BrainJ 1.0.2";
-ReleaseDate= "September 24, 2021";
+BrainJVer ="BrainJ 1.0.4";
+ReleaseDate= "November 17, 2021";
 
 
 #@ File[] listOfPaths(label="Select experiment/brain folders:", style="both")
@@ -107,8 +100,8 @@ for (FolderNum=0; FolderNum<listOfPaths.length; FolderNum++) {
 			close("Results");
 			cleanupROI();
 			print("\\Clear");
-			print("- - - " +BrainJVer+ " - - -");
-			print("Version release date: " +ReleaseDate);
+			print(BrainJVer + " ("+ReleaseDate+") - Created by Luke Hammond. Contact: lh2881@columbia.edu");
+			print("Cellular Imaging | Zuckerman Institute, Columbia University - https://www.cellularimaging.org/blog/brainj");
 			print("  ");
 			print("Processing folder "+(FolderNum+1)+" of "+listOfPaths.length+" folders selected for processing." );
 	        print("  Folder:" + inputdir + " ");
@@ -305,7 +298,6 @@ print("-------------------------------------------------------------------------
 
 CheckAnnotationFile();
 
-
 if (AtlasAnalysisON == true ||  ProjectionTransformationON == true || CellAnalysisON ==true || CreateCellAnalysisVisON ==true || CreateColorDensityImagesON == true || RawChannelTransformON == true || IntensityMeasureInABAON == true) {
 	
 	print("Performing 3D atlas registration and preparation for analysis...");
@@ -353,8 +345,6 @@ if (AtlasAnalysisON == true ||  ProjectionTransformationON == true || CellAnalys
 			File.mkdir(input + "5_Analysis_Output/Temp/Transformed_C"+ProChans[Ch_i]+"_Binary_Out");
 		}	
 	}
-	
-
 
 // Commandline Directories
 	
@@ -1268,7 +1258,11 @@ print("Total processing time: ", (dif/60), "minutes.");
 print("Analysis type: " + AtlasType);
 print("Atlas used for analysis: " + AtlasName);
 print("---------------------------------------------------------------------------------------------------------------------");
-print("- - - " +BrainJVer+ " - - -");
+print("Processed with "+BrainJVer + " ("+ReleaseDate+")");
+print("Created by Luke Hammond. Contact: lh2881@columbia.edu");
+print("Cellular Imaging | Zuckerman Institute, Columbia University");
+print("https://www.cellularimaging.org/blog/brainj");
+print("Available for use/modification/sharing under the MIT License: https://opensource.org/licenses/MIT");
 print("---------------------------------------------------------------------------------------------------------------------");
 print("");
 

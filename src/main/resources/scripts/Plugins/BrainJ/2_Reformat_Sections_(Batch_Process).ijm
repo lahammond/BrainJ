@@ -1,26 +1,41 @@
-// Reformat Series Tool
+// Reformat Sections Tool
  
 // Author: 	Luke Hammond (lh2881@columbia.edu)
 // Cellular Imaging | Zuckerman Institute, Columbia University
 // Date:	21st November 2017
-//	
-//	This macro converts ND2 files to TIF and renames them based on their position on the slide.
-// 		For AZ100 Slide Scanner: 
-//			Top left corner is ~ 70,40 mm 
-// 			Bottom right corner is 30, 25 mm
-// 			
-// 	Usage:
-//		1. Run on folder containing ND2 files from AZ100 slide scanner
-//		2. Select Series Preview if you wish to generate a montage for quick inspection of slices and slice order.
+//
 
-// Updates:
-// 11/22/2017: Updated to include slide ordering prior to series preview.
-// 11/29/2017: Updated to include rotation and flipping in TIF generation. 
-// 12/21/2017: Updated to include single rows and a 0 to leave resolution unchanged
-// 2/1/2017: Updated to include full section clean up and handle sagittal sections
-// 2/8/2017:Updated to export stacks, to improve memory handling for registering large datasets
-// 4/24/2018:  Updated to allow batch processing
+//	MIT License
 
+//	Copyright (c) 2017 Luke Hammond lh2881@columbia.edu
+
+//	Permission is hereby granted, free of charge, to any person obtaining a copy
+//	of this software and associated documentation files (the "Software"), to deal
+//	in the Software without restriction, including without limitation the rights
+//	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//	copies of the Software, and to permit persons to whom the Software is
+//	furnished to do so, subject to the following conditions:
+
+//	The above copyright notice and this permission notice shall be included in all
+//	copies or substantial portions of the Software.
+
+//	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//	SOFTWARE.
+
+
+//This script reformats, centers and aligns serial tissue sections in preparation for visualization, registration and analysis."
+//Image files should be stored as file sequences in folders. It is possible to batch process multiple samples/folders. <br><br> "
+//Processed images will be placed into a subdirectories called 1_Reformated_Sections and 2_Section_Preview. <br> <br> "
+//Image coordinates can be extracted from Nikon ND2 files for automated reordering of sections, otherwise alphanumeric filenames can be used. <br> <br> "
+
+
+BrainJVer ="BrainJ 1.0.4";
+ReleaseDate= "November 17, 2021";
 
 // Initialization
 requires("1.52p");
@@ -30,26 +45,19 @@ run("Colors...", "foreground=white background=black selection=yellow");
 run("Clear Results"); 
 run("Close All");
 
-BrainJVer ="BrainJ 1.0.2";
-ReleaseDate= "September 24, 2021";
-
-
 // Select input directories
 
 #@ File[] listOfPaths(label="select files or folders", style="both")
 //#@ boolean(label="Use GPU-acceleration (requires CLIJ)?", value = false, description="") GPU_ON
 
-
 GPU_ON = false
 
 print("\\Clear");
-print("- - - " +BrainJVer+ " - - -");
-print("Version release date: " +ReleaseDate);
-print("  ");
+print(BrainJVer + " ("+ReleaseDate+") - Created by Luke Hammond. Contact: lh2881@columbia.edu");
+print("Cellular Imaging | Zuckerman Institute, Columbia University - https://www.cellularimaging.org/blog/brainj");
 
 print("Reformatting sections...");
 setBatchMode(true);
-
 
 if (GPU_ON == true) {
 	List.setCommands;
@@ -209,6 +217,13 @@ for (FolderNum=0; FolderNum<listOfPaths.length; FolderNum++) {
 			}
 			print("");
 			print(CanvasDim[3]);
+			print("");
+			print("Processed with "+BrainJVer + " ("+ReleaseDate+")");
+			print("Created by Luke Hammond. Contact: lh2881@columbia.edu");
+			print("Cellular Imaging | Zuckerman Institute, Columbia University");
+			print("https://www.cellularimaging.org/blog/brainj");
+			print("Available for use/modification/sharing under the MIT License: https://opensource.org/licenses/MIT");
+			print("");
 	
 			selectWindow("Log");
 			// time stamp log to prevent overwriting.
@@ -1067,6 +1082,9 @@ function LargestCanvas(input) {
 	files = ImageFilesOnlyArray(files);		
 	files = Array.sort( files );
 	CanvasSizes = "";
+	if (files.length == 0) {
+		exit("No image files found in folder.");
+	}
 	for(i=0; i<files.length; i++) {				
 			
 		run("Bio-Formats Macro Extensions");

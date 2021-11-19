@@ -2,9 +2,7 @@
 
 // First open input directory and check for parameter file
 
-// if parameter file exists - populate all the variables - if not then just proceed - doesn't seem to work but parameters persist so it should be easy to use
-
-
+// Potential update: if parameter file exists - populate all the variables - if not then just proceed
   
 #@ File(label="Select folder:", description="Subfolder containing brain raw data", style="directory") input
 
