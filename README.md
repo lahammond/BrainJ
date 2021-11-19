@@ -3,11 +3,9 @@ An accessible tool for automated brain reconstruction, mesoscale mapping, and ce
 
 **Please read the [BrainJ Guide.pdf](https://github.com/lahammond/BrainJ/blob/master/BrainJ%20Guide%209_3.pdf) for step-by-step instructions and troubleshooting.**
 
-A recorded workshop on using BrainJ for quantitive analysis of cells and projections, as well as analysis of probe and GRIN lens placement, is now available online.
+A recorded workshop on using BrainJ for quantitive analysis of cells and projections, as well as analysis of probe and GRIN lens placement, is now [available on YouTube](https://www.youtube.com/embed/R22U9LMyGdA)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/R22U9LMyGdA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-Now supporting the enhanced and unified mouse brain atlas - https://www.nature.com/articles/s41467-019-13057-w
+Now supporting the [enhanced and unified mouse brain atlas](https://www.nature.com/articles/s41467-019-13057-w)
 
 <img src="./Images/BrainJ1.jpg" width="800">
 
