@@ -40,7 +40,7 @@ TransVolumeTrim = 15;
 #@ Integer(label="Minimum intensity threshold:", value = 125, style="spinner") MaximaInt3
 #@ Integer(label="Minimum cell area (um):", value = 20, style="spinner") Size3
 //#@ Integer(label="Unsharp Mask radius (px, 0 if none):", value = 2, style="spinner") USRad
-//#@ BigDecimal(label="Unsharp Mask weight:", value = 0.700, style="spinner") USMW
+//#@ Double(label="Unsharp Mask weight:", value = 0.700, style="spinner") USMW
 //#@ boolean(label="Measure intensity of each cell:", description="Leave off to save time. Enable to measured mean intensity of each channel for all detected cells.") MeasureInt
 //#@ boolean(label="Display cell intensity on cell validation images:", description="Leave off to save time. Enable to see measured mean intensity overlayed on validation image.") IntVal
 
@@ -58,8 +58,8 @@ TransVolumeTrim = 15;
 
 
 // SETTINGS FOR CHANGING RESOLUTION OF PROJECTION ANALYSIS - CURRENTLY ONLY 25um POSSIBLE BUT COULD DO THIS AT HIGHER RES WITH SOME MODIFICATION - LEAVE OFF OUT FOR V7
-#@ BigDecimal(label="XY resolution used for projection density analysis (um/px):", value = 10.00, description="Higher resolution requires more RAM", style="spinner") ProDetectionResolution
-//#@ BigDecimal(label="Section thickness/resolution used for projection density analysis (default 25) (um):", value = 25.00, description="Leave at 25um unless you are using sections thinner than 25um", style="spinner") ProDetectionResolutionZ
+#@ Double(label="XY resolution used for projection density analysis (um/px):", value = 10.00, description="Higher resolution requires more RAM", style="spinner") ProDetectionResolution
+//#@ Double(label="Section thickness/resolution used for projection density analysis (default 25) (um):", value = 25.00, description="Leave at 25um unless you are using sections thinner than 25um", style="spinner") ProDetectionResolutionZ
 
 #@String  (visibility="MESSAGE", value="   ") out
 #@String  (visibility="MESSAGE", value="--------------------------------------------------------------------------------------------------------------------------------------------------------------") out5

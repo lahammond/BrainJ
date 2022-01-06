@@ -34,8 +34,8 @@
 //Image coordinates can be extracted from Nikon ND2 files for automated reordering of sections, otherwise alphanumeric filenames can be used. <br> <br> "
 
 
-BrainJVer ="BrainJ 1.0.4";
-ReleaseDate= "November 17, 2021";
+BrainJVer ="BrainJ 1.0.5";
+ReleaseDate= "January 6, 2021";
 
 // Initialization
 requires("1.52p");

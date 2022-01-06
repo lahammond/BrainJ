@@ -3,6 +3,12 @@
 // First open input directory and check for parameter file
 
 // Potential update: if parameter file exists - populate all the variables - if not then just proceed
+
+
+
+
+//#@ String (visibility=MESSAGE, value="<html><h1><font size=6 color=#0E6655>Cellular Imaging Platform</h><br/><h1><font size=5 color=#154360><i>Zuckerman Institute, Columbia University</i></h1><h3><font size = 4><a href=http://cellularimaging.org/> Cellular Imaging Platform</a></html>") doc
+
   
 #@ File(label="Select folder:", description="Subfolder containing brain raw data", style="directory") input
 
@@ -16,8 +22,8 @@
 #@ String(label="Order of sections on slide:", choices={"Right and Down", "Left and Down", "Right", "Left", "Right and Up", "Left and Up" }, style="listBox", description="Right and Down = Top: 1, 2, 3 Bottom: 4, 5, 6 || Left and Down = Top: 3, 2, 1 Bottom: 6, 5, 4 || Right = 1, 2, 3") SliceArrangement
 
 
-#@ BigDecimal(label="Lateral (XY) resolution of input (um):", value = 1, style="spinner") InputRes
-#@ BigDecimal(label="Final resolution of image output (um/px):", value = 2.00, description="Leave as 0 for original resolution", style="spinner") FinalResolution
+#@ Double(label="Lateral (XY) resolution of input (um):", value = 1, style="spinner") InputRes
+#@ Double(label="Final resolution of image output (um/px):", value = 2.00, description="Leave as 0 for original resolution", style="spinner") FinalResolution
 #@ Integer(label="Section cut thickness (um):", value = 50, style="spinner") ZCut
 
 #@ String(label="Counterstain channel (e.g. DAPI or NeuroTrace):", choices={"1", "2", "3", "4", "5"}, style="radioButtonHorizontal", value = "2", description="Select the channel number containing DAPI or Autofluorescence, to be used for registration.") AlignCh

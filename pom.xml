@@ -13,7 +13,7 @@
 	</parent>
 
 	<groupId>com.zuckerman.cellularimaging</groupId>
-	<version>1.0.4</version>
+	<version>1.0.5</version>
 
 	<name>BrainJ</name>
 	<url>https://zuckermaninstitute.columbia.edu</url>
@@ -24,7 +24,7 @@
 	</organization>
 	<licenses>
 		<license>
-			<name>Simplified BSD License</name>
+			<name>MIT License</name>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>

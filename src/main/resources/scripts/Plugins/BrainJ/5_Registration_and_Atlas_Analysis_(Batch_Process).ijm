@@ -17,8 +17,8 @@ run("Colors...", "foreground=white background=black selection=yellow");
 run("Clear Results"); 
 run("Close All");
 
-BrainJVer ="BrainJ 1.0.4";
-ReleaseDate= "November 17, 2021";
+BrainJVer ="BrainJ 1.0.5";
+ReleaseDate= "January 6, 2021";
 
 
 #@ File[] listOfPaths(label="Select experiment/brain folders:", style="both")
