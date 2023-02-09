@@ -53,11 +53,18 @@ function RenameSectionFilesFromND2Coord(input) {
 	for(filen=0; filen<files.length; filen++) {				
 		image = files[filen];	
 		
-		run("Bio-Formats Importer", "open=[" + input + image + "] color_mode=Default display_metadata rois_import=[ROI manager] view=[Metadata only] stack_order=Default");
-		selectWindow("Original Metadata - " + image );
-		saveAs( "Results", input + "temp_metadata.txt" );
-		selectWindow("Original Metadata - " + image );
-		run("Close");
+
+		run("Bio-Formats Macro Extensions");
+		Ext.setId(input + image);
+		Ext.getMetadataValue("dXPos", XPos);
+		Ext.getMetadataValue("dYPos", YPos);
+
+		
+		//run("Bio-Formats Importer", "open=[" + input + image + "] color_mode=Default display_metadata rois_import=[ROI manager] view=[Metadata only] stack_order=Default");
+		//selectWindow("Original Metadata - " + image );
+		//saveAs( "Results", input + "temp_metadata.txt" );
+		//selectWindow("Original Metadata - " + image );
+		//run("Close");
 
 		// Process name
 				
@@ -74,28 +81,26 @@ function RenameSectionFilesFromND2Coord(input) {
 				slide511=100+parseInt(substring(image,7,9));
 			}
 			smTitle = "Slide"+slide511+"_";
-				
-		
 		}
 
 			
 		//Get Metadata from Image
 				
-		Metadata = split( File.openAsString( input + "temp_metadata.txt" ), "\n" );
+		//Metadata = split( File.openAsString( input + "temp_metadata.txt" ), "\n" );
 	
 		
 		
-		for(i=0; i<Metadata.length; i++){ 
-			if(matches(Metadata[i],".*dXPos.*") == 1){
-				XRow=i;
-			}
-			if(matches(Metadata[i],".*dYPos.*") == 1){
-				YRow=i;
-			}
-		}
+		//for(i=0; i<Metadata.length; i++){ 
+			//if(matches(Metadata[i],".*dXPos.*") == 1){
+				//XRow=i;
+			//}
+			//if(matches(Metadata[i],".*dYPos.*") == 1){
+				//YRow=i;
+			//}
+		//}
 	
-		XPos=substring(Metadata[XRow],8,10);
-		YPos=substring(Metadata[YRow],8,10);
+		//XPos=substring(Metadata[XRow],8,10);
+		//YPos=substring(Metadata[YRow],8,10);
 	
 		if (SectionArrangement == "Right and Down"){
 			if (YPos >=30) {

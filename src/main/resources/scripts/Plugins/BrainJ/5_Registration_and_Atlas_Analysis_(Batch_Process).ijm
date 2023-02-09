@@ -17,8 +17,8 @@ run("Colors...", "foreground=white background=black selection=yellow");
 run("Clear Results"); 
 run("Close All");
 
-BrainJVer ="BrainJ 1.0.5";
-ReleaseDate= "January 6, 2021";
+BrainJVer ="BrainJ 1.0.7";
+ReleaseDate= "February 9, 2023";
 
 
 #@ File[] listOfPaths(label="Select experiment/brain folders:", style="both")
@@ -1296,8 +1296,8 @@ if (CellPlotCheck > 0) {
 
 if (CellAnalysisON == true) {
 	print("");
-	print("Bregma coordinates have been provided by comparing multiple landmarks to determine the following linear transformations:");
-	print("   Bregma_AP = (ZPosition*25-5350)*-1   Bregma_DV = (YPosition*25-470)*-1   Bregma_ML = XPosition*25-5700");
+	//print("Bregma coordinates have been provided by comparing multiple landmarks to determine the following linear transformations:");
+	//print("   Bregma_AP = (ZPosition*25-5350)*-1   Bregma_DV = (YPosition*25-470)*-1   Bregma_ML = XPosition*25-5700");
 }
 
 selectWindow("Log");
@@ -3155,7 +3155,7 @@ function AnnotatePoints (PointsIn, AtlasAnnotationImg, AtlasAnnotationCSV, Measu
 			OutputRegionIDs[i] = getResult("output_id", i);
 		}
 		RegionNames[i] = getResultString("name", i);
-		RegionAcr[i] = getResultString("acronym", i);
+		RegionAcr[i] = "\"" + getResultString("acronym", i)+ "\"";
 		ParentIDs[i] = getResultString("parent_ID", i);
 		ParentNames[i] = getResultString("parent_acronym", i);	
 		Graph_Order[i] = getResultString("graph_order", i);	
@@ -3174,7 +3174,8 @@ function AnnotatePoints (PointsIn, AtlasAnnotationImg, AtlasAnnotationCSV, Measu
 	// 2) Open file to write into
 	WriteOut = File.open(CellFileOut);
 	// 3) Print headings
-	print(WriteOut, "X,Y,Z,Z_Dither,Bregma_AP,Bregma_DV,Bregma_ML,Mean_Int_Ch1,Mean_Int_Ch2,Mean_Int_Ch3,Mean_Int_Ch4,Hemisphere,ID,Acronym\n");
+	print(WriteOut, "X,Y,Z,Z_Dither,Mean_Int_Ch1,Mean_Int_Ch2,Mean_Int_Ch3,Mean_Int_Ch4,Hemisphere,ID,Acronym\n");
+	//print(WriteOut, "X,Y,Z,Z_Dither,Bregma_AP,Bregma_DV,Bregma_ML,Mean_Int_Ch1,Mean_Int_Ch2,Mean_Int_Ch3,Mean_Int_Ch4,Hemisphere,ID,Acronym\n");
 	//print(WriteOut, "X,Y,Z,Z_Dither,Mean_Int_Ch1,Mean_Int_Ch2,Mean_Int_Ch3,Mean_Int_Ch4,Hemisphere,ID\n");
 
 	
@@ -3186,9 +3187,9 @@ function AnnotatePoints (PointsIn, AtlasAnnotationImg, AtlasAnnotationCSV, Measu
 		} else {
 			HemisphereArray[i] = "Left";
 		}
-		BregmaAP = ((ZPos[i]*25)-5350)*-1;
-		BregmaDV = ((YPos[i]*25)-470)*-1;
-		BregmaML = XPos[i]*25-5700;
+		//BregmaAP = ((ZPos[i]*25)-5350)*-1;
+		//BregmaDV = ((YPos[i]*25)-470)*-1;
+		//BregmaML = XPos[i]*25-5700;
 
 		// Update Region Intensity to Reflect OutputIDs
 		location = LocateID(RegionIDs, MeanMeasurements[i]);
@@ -3198,8 +3199,8 @@ function AnnotatePoints (PointsIn, AtlasAnnotationImg, AtlasAnnotationCSV, Measu
 		
 		
 		//print(WriteOut, XPos[i]+","+YPos[i]+","+ZPos[i]+","+Z_Dither[i]+","+BregmaAP+","+BregmaDV+","+BregmaML+","+MeanIntCh1[i]+","+MeanIntCh2[i]+","+MeanIntCh3[i]+","+MeanIntCh4[i]+","+HemisphereArray[i]+","+MeanMeasurements[i]);
-		
-		print(WriteOut, XPos[i]+","+YPos[i]+","+ZPos[i]+","+Z_Dither[i]+","+BregmaAP+","+BregmaDV+","+BregmaML+","+MeanIntCh1[i]+","+MeanIntCh2[i]+","+MeanIntCh3[i]+","+MeanIntCh4[i]+","+HemisphereArray[i]+","+trueID+","+trueAcr);
+		//print(WriteOut, XPos[i]+","+YPos[i]+","+ZPos[i]+","+Z_Dither[i]+","+BregmaAP+","+BregmaDV+","+BregmaML+","+MeanIntCh1[i]+","+MeanIntCh2[i]+","+MeanIntCh3[i]+","+MeanIntCh4[i]+","+HemisphereArray[i]+","+trueID+","+trueAcr);
+		print(WriteOut, XPos[i]+","+YPos[i]+","+ZPos[i]+","+Z_Dither[i]+","+MeanIntCh1[i]+","+MeanIntCh2[i]+","+MeanIntCh3[i]+","+MeanIntCh4[i]+","+HemisphereArray[i]+","+trueID+","+trueAcr);
 	} 
 
 	// 5) Close file
@@ -3459,7 +3460,7 @@ function MeasureIntensitiesLRHemisphereFullRes(Channel) {
 				OutputRegionIDs[i] = getResult("output_id", i);
 			}
 			RegionNames[i] = getResultString("name", i);
-			RegionAcr[i] = getResultString("acronym", i);
+			RegionAcr[i] = "\"" + getResultString("acronym", i)+ "\"";
 			ParentIDs[i] = getResultString("parent_ID", i);
 			ParentNames[i] = getResultString("parent_acronym", i);	
 			Graph_Order[i] = getResultString("graph_order", i);	
@@ -5375,7 +5376,7 @@ function CreateDensityTableLRHemisphereFullRes(Channel, ProBGround) {
 			OutputRegionIDs[i] = getResult("output_id", i);
 		}
 		RegionNames[i] = getResultString("name", i);
-		RegionAcr[i] = getResultString("acronym", i);
+		RegionAcr[i] = "\"" + getResultString("acronym", i)+ "\"";
 		ParentIDs[i] = getResultString("parent_ID", i);
 		ParentNames[i] = getResultString("parent_acronym", i);	
 		Graph_Order[i] = getResultString("graph_order", i);	
@@ -6239,8 +6240,8 @@ function CreateCellDensityTableLRHemisphereFullResSpinalCord(Channel) {
 		
 		for(i=0; i<NumIDs; i++) {
 			RegionIDs[i] = getResult("id", i);
-			RegionNames[i] = getResultString("name", i);
-			RegionAcronyms[i] = getResultString("acronym", i);
+			RegionNames[i] = "\"" + getResultString("name", i)+ "\"";
+			RegionAcronyms[i] = "\"" + getResultString("acronym", i)+ "\"";
 			ParentIDs[i] = getResult("parent_ID", i);
 			ParentAcronyms[i] = "\"" + getResultString("parent_acronym", i) + "\"";
 			ChildAcronyms[i] = "\"" + getResultString("children_acronym", i) +"\"";
@@ -6391,8 +6392,8 @@ function SCCreateSummaryRows (InputTable) {
 	
 	for(i=0; i<NumIDs; i++) {
 		RegionIDs[i] = getResult("id", i);
-		RegionNames[i] = getResultString("name", i);
-		RegionAcronyms[i] = getResultString("acronym", i);
+		RegionNames[i] = "\"" + getResultString("name", i) + "\"";
+		RegionAcronyms[i] = "\"" + getResultString("acronym", i) + "\"";
 		ParentIDs[i] = getResult("parent_ID", i);
 		ParentAcronyms[i] = "\"" + getResultString("parent_acronym", i) + "\"";
 		ChildAcronyms[i] = "\"" + getResultString("children_acronym", i) +"\"";

@@ -34,8 +34,8 @@
 //Image coordinates can be extracted from Nikon ND2 files for automated reordering of sections, otherwise alphanumeric filenames can be used. <br> <br> "
 
 
-BrainJVer ="BrainJ 1.0.5";
-ReleaseDate= "January 6, 2021";
+BrainJVer ="BrainJ 1.0.7";
+ReleaseDate= "February 9, 2023";
 
 // Initialization
 requires("1.52p");
@@ -48,6 +48,8 @@ run("Close All");
 // Select input directories
 
 #@ File[] listOfPaths(label="select files or folders", style="both")
+#@ String(label="Threshold method for section detection:", choices={"Otsu", "Li", "Mean"}, style="radioButtonHorizontal", description="Otsu generally works well, try alternatives if areas missing from sections.") ThreshMethod
+
 //#@ boolean(label="Use GPU-acceleration (requires CLIJ)?", value = false, description="") GPU_ON
 
 GPU_ON = false
@@ -237,7 +239,7 @@ for (FolderNum=0; FolderNum<listOfPaths.length; FolderNum++) {
 function ReformatSeries(input, FinalRes) {
 	//run by : ReformatSeries(input, FinalRes);		
 
-	run("Collect Garbage");
+	collectGarbage(10, 4);
 	
 	files = getFileList(input);	
 	files = ImageFilesOnlyArray(files);		
@@ -285,7 +287,7 @@ function ReformatSeries(input, FinalRes) {
 			File.mkdir(input + "1_Reformatted_Sections/"+j);
 	}
 
-	run("Collect Garbage");
+	collectGarbage(10, 4);
 	
 	if(FinalRes > 0) {
 		Rescale = InputRes/FinalRes;
@@ -413,7 +415,7 @@ function ReformatSeries(input, FinalRes) {
 				//Automatic Detection settings
 				run("Subtract Background...", "rolling=25");
 				//setThreshold(45, 65535);
-				run("Auto Threshold", "method=Mean white");
+				run("Auto Threshold", "method="+ThreshMethod+" white");
 				setOption("BlackBackground", true);
 				run("Convert to Mask");	
 				run("Median...", "radius=2");	
@@ -432,7 +434,8 @@ function ReformatSeries(input, FinalRes) {
 			run("Subtract...", "value="+BGround+"");
 			// Apply Threshold
 			run("Set Measurements...", "mean fit redirect=None decimal=3");
-			run("Auto Threshold", "method=Mean white");
+		
+			run("Auto Threshold", "method="+ThreshMethod+" white");
 			setOption("BlackBackground", true);
 			run("Colors...", "foreground=white background=black selection=yellow");
 			run("Convert to Mask"); 
@@ -571,7 +574,7 @@ function ReformatSeries(input, FinalRes) {
 				close();
 			}
 		}				
-		run("Collect Garbage");
+		collectGarbage(10, 4);
 
 		if (i == 0) {
 			Sectionend = getTime();
@@ -652,7 +655,7 @@ function CreateSectionPreview(InputFolder, FinalRes) {
 	run("Time Stamper", "starting=1 interval=1 x=5 y=16 font=14 decimal=0 anti-aliased or= ");
 	saveAs("Tiff", input + "2_Section_Preview/Section_Preview_Stack.tif");
 	close();
-	run("Collect Garbage");
+	collectGarbage(10, 4);
 }
 	
 

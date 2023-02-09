@@ -66,7 +66,7 @@ Export = input + "1_Reformatted_Sections/";
 ChNum = CountSubFolders(Export);
 ChArray = NumberedArray(ChNum);
 
-run("Collect Garbage");
+collectGarbage(10, 4);
 
 // Process each channel
 for(j=1; j<ChNum+1; j++) {		
@@ -89,6 +89,7 @@ for(j=1; j<ChNum+1; j++) {
 		//run("Save");
 		saveAs("Tiff", FileFolder + image);
 		close();
+		collectGarbage(10, 4);
 	}
 	//Vertically
 	for(i=0; i<VFlipIdx.length; i++) {				
@@ -104,6 +105,7 @@ for(j=1; j<ChNum+1; j++) {
 		//run("Save");
 		saveAs("Tiff", FileFolder + image);
 		close();
+		collectGarbage(10, 4);
 	}
 	//Replacing
 	for(i=0; i<ReplaceIdx.length; i++) {				
@@ -127,9 +129,10 @@ for(j=1; j<ChNum+1; j++) {
 			run("Select None");
 			saveAs("Tiff", FileFolder + image);
 			close();	
+			collectGarbage(10, 4);
 		}
 	}
-run("Collect Garbage");
+collectGarbage(10, 4);
 print("");
 }
 		
@@ -144,7 +147,7 @@ File.mkdir(input + "2_Section_Preview");
 
 print("Creating scaled down stack for checking section quality and order..");
 //setBatchMode(false);
-run("Collect Garbage");
+collectGarbage(10, 4);
 
 if (ChNum > 1) {
 	for(j=1; j<ChArray.length+1; j++) {
@@ -215,7 +218,7 @@ run("Time Stamper", "starting=1 interval=1 x=1 y=16 font=14 decimal=0 anti-alias
 saveAs("Tiff", input + "2_Section_Preview/Section_Preview_Stack.tif");
 close();
 
-run("Collect Garbage");
+collectGarbage(10, 4);
 
 
 
@@ -293,3 +296,13 @@ function LocateValue(inputArray, VarName) {
 	return Value;
 }
 
+function collectGarbage(slices, itr){
+	setBatchMode(false);
+	wait(1000);
+	for(i=0; i<itr; i++){
+		wait(50*slices);
+		run("Collect Garbage");
+		call("java.lang.System.gc");
+		}
+	setBatchMode(true);
+}
