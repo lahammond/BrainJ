@@ -1,3 +1,5 @@
+<a href="https://zenodo.org/badge/latestdoi/285637037"><img src="https://zenodo.org/badge/285637037.svg" alt="DOI"></a>
+
 # BrainJ
 An accessible tool for automated brain reconstruction, mesoscale mapping, and cell analysis.
 
