@@ -34,8 +34,8 @@
 //Image coordinates can be extracted from Nikon ND2 files for automated reordering of sections, otherwise alphanumeric filenames can be used. <br> <br> "
 
 
-BrainJVer ="BrainJ 1.0.7";
-ReleaseDate= "February 9, 2023";
+BrainJVer ="BrainJ 1.0.8";
+ReleaseDate= "May 26, 2023";
 
 // Initialization
 requires("1.52p");
@@ -48,7 +48,7 @@ run("Close All");
 // Select input directories
 
 #@ File[] listOfPaths(label="select files or folders", style="both")
-#@ String(label="Threshold method for section detection:", choices={"Otsu", "Li", "Mean"}, style="radioButtonHorizontal", description="Otsu generally works well, try alternatives if areas missing from sections.") ThreshMethod
+#@ String(label="Threshold method for section detection:", choices={"Mean", "Li", "Otsu"}, value = "Mean", style="radioButtonHorizontal", description="Mean works best for widefield sections. Otsu generally works well, try alternatives if areas missing from sections.") ThreshMethod
 
 //#@ boolean(label="Use GPU-acceleration (requires CLIJ)?", value = false, description="") GPU_ON
 
