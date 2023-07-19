@@ -13,7 +13,7 @@ We also support the [enhanced and unified mouse brain atlas](https://www.nature.
 
 ## About
 
-Reconstructing serial tissue sections into whole brains and analyzing them within a common coordinate framework is an essential capability for the discovery of novel circuits and studies in neuroscience. Many existing solutions require coding experience, commercial software, or labor intensive interaction and annotation for researchers. With an emphasis on accessibility and automation, BrainJ enables high-throughput analysis of serial tissue sections imaged using confocal or widefield techniques. Developed in Fiji, our approach leverages freely available tools for machine learning pixel classification for cell detection and mesoscale mapping of axons and dendrites. With a simple graphical user interface, this approach is easy to deploy and use, requiring no coding experience and minimal manual intervention to process multiple datasets. Our approach is extensible to any project requiring serial section reconstruction and atlas-based analysis and allows a typical whole brain dataset to be reconstructed and analyzed within 2-4 hours.
+Reconstructing serial tissue sections into whole brains and analyzing them within a common coordinate framework is an essential capability for the discovery of novel circuits and studies in neuroscience. Many existing solutions require coding experience, commercial software, or labor-intensive interaction and annotation for researchers. With an emphasis on accessibility and automation, BrainJ enables high-throughput analysis of serial tissue sections imaged using confocal or widefield techniques. Developed in Fiji, our approach leverages freely available tools for machine learning pixel classification for cell detection and mesoscale mapping of axons and dendrites. With a simple graphical user interface, this approach is easy to deploy and use, requiring no coding experience and minimal manual intervention to process multiple datasets. Our approach is extensible to any project requiring serial section reconstruction and atlas-based analysis and allows a typical whole-brain dataset to be reconstructed and analyzed within 2-4 hours.
 
 
 ## Installation
@@ -22,8 +22,8 @@ Reconstructing serial tissue sections into whole brains and analyzing them withi
 * Install BrainJ - Download BrainJ.jar and copy into your ImageJ plugins folder
 * Install [MultiStackReg](http://bradbusse.net/sciencedownloads.html) - Download and copy into your ImageJ plugins folder
 * Install [TurboReg](http://bigwww.epfl.ch/thevenaz/turboreg/) 
-* Install [Elastix 5.0.0](http://elastix.isi.uu.nl/download_links.php)
-* Install [Ilastix 1.3.3post3](https://www.ilastik.org/download.html)
+* Install [Elastix 5.0.0](https://github.com/SuperElastix/elastix/releases/tag/5.1.0))
+* Install [Ilastix 1.3.3post3](https://files.ilastik.org/ilastik-1.3.3post3-win64.exe)
 * Download the required [atlas files](https://www.dropbox.com/sh/z6au8vtauiaw9vt/AACyG_jIXxZN7mLdjyHJRJuba?dl=0) and [Ilastik project](https://www.dropbox.com/sh/dbu2uue8x5gwkbi/AABqgoFY_-KuMkwwXDEVzpoNa?dl=0)
 * Store the atlas files folder somewhere on your computer. The pipeline will use the files
 in this folder to perform analysis and generate visualizations
@@ -42,6 +42,7 @@ If you use BrainJ please cite our publication:
 ## Limitations
 
 * Badly damaged tissue may prevent registration and alignment to atlas.
+* Requires sections spanning at least 2-3mm in the anterior-posterior axis.
 
 ## Similar Tools
 
@@ -58,6 +59,7 @@ For tissue sections:
 * [BrainPatterns](http://brainpatterns.compute.dtu.dk/)
 
 For whole brain data:
+* [BrainGlobe](https://github.com/brainglobe)
 * [ClearMap](https://idisco.info/clearmap-2/)
 * [Brainmapr](https://github.com/hms-dbmi/brainmapr)
 * [SMART](https://mjin1812.github.io/SMART/)
